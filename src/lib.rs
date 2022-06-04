@@ -1,5 +1,7 @@
 use core::num::Wrapping;
 
+mod impls_32;
+
 #[derive(Default, Debug, PartialEq, PartialOrd, Clone, Copy)]
 #[repr(transparent)]
 pub struct Bits<const N: usize>(u32);
@@ -234,6 +236,57 @@ where
     }
 }
 
+// F > T
+pub trait BitsDownCast<const T: usize>: BitsSize + Copy + Into<u32> {
+    #[inline(always)]
+    fn take_low(self) -> Bits<T> {
+        let value: u32 = self.into();
+        Bits(truncate(value, T))
+    }
+    #[inline(always)]
+    fn take_high(self) -> Bits<T> {
+        let value: u32 = self.into();
+        Bits(value >> (Self::BIT_SIZE - T))
+    }
+}
+
+pub trait BitsUpCast<const T: usize>: BitsSize + Copy + Into<u32> {
+    #[inline(always)]
+    fn zero_extend(self) -> Bits<T> {
+        let value = self.into();
+        Bits(value)
+    }
+
+    fn sign_extend(self) -> Bits<T> {
+        // NOTE: We are assuming here that no Bits<0> structure can exist
+        let top_bit = self.into() >> (Self::BIT_SIZE - 1);
+        let top_bits = if top_bit == 1 {
+            !(!0 << (T - Self::BIT_SIZE))
+        } else {
+            0
+        };
+        let value = self.into();
+        Bits((top_bits << Self::BIT_SIZE) + value)
+    }
+}
+
+pub trait BitsConcat<const R: usize, const O: usize>: Copy + Into<u32> {
+    fn concat(self, rhs: Bits<R>) -> Bits<O> {
+        let lhs = self.into();
+        let rhs: u32 = rhs.into();
+
+        Bits((lhs << R) | rhs)
+    }
+}
+
+impl<const F: usize, const T: usize> BitsUpCast<T> for Bits<F>
+where
+    Bits<T>: BitsDownCast<F>,
+    Bits<F>: BitsSize,
+{
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -353,54 +406,3 @@ mod tests {
     }
 }
 
-// F > T
-pub trait BitsDownCast<const T: usize>: BitsSize + Copy + Into<u32> {
-    #[inline(always)]
-    fn take_low(self) -> Bits<T> {
-        let value: u32 = self.into();
-        Bits(truncate(value, T))
-    }
-    #[inline(always)]
-    fn take_high(self) -> Bits<T> {
-        let value: u32 = self.into();
-        Bits(value >> (Self::BIT_SIZE - T))
-    }
-}
-
-pub trait BitsUpCast<const T: usize>: BitsSize + Copy + Into<u32> {
-    #[inline(always)]
-    fn zero_extend(self) -> Bits<T> {
-        let value = self.into();
-        Bits(value)
-    }
-
-    fn sign_extend(self) -> Bits<T> {
-        // NOTE: We are assuming here that no Bits<0> structure can exist
-        let top_bit = self.into() >> (Self::BIT_SIZE - 1);
-        let top_bits = if top_bit == 1 {
-            !(!0 << (T - Self::BIT_SIZE))
-        } else {
-            0
-        };
-        let value = self.into();
-        Bits((top_bits << Self::BIT_SIZE) + value)
-    }
-}
-
-pub trait BitsConcat<const R: usize, const O: usize>: Copy + Into<u32> {
-    fn concat(self, rhs: Bits<R>) -> Bits<O> {
-        let lhs = self.into();
-        let rhs: u32 = rhs.into();
-
-        Bits((lhs << R) | rhs)
-    }
-}
-
-impl<const F: usize, const T: usize> BitsUpCast<T> for Bits<F>
-where
-    Bits<T>: BitsDownCast<F>,
-    Bits<F>: BitsSize,
-{
-}
-
-mod impls_32;
