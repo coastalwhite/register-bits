@@ -5,6 +5,7 @@ edition = "2021"
 
 [features]
 default = ["32bit"]
+all = ["8bit", "16bit", "32bit", "64bit", "128bit"]
 8bit = []
 16bit = []
 32bit = []
