@@ -51,18 +51,18 @@ impl<const N: usize> From<Reg128Bits<N>> for BaseType {
     }
 }
 
-const fn truncate(value: BaseType, num_bits: usize) -> BaseType {
+const fn truncate(value: BaseType, to_num_bits: usize) -> BaseType {
     // Needed to circumvent overflow protection
-    if num_bits == 0 {
+    if to_num_bits == 0 {
         return 0;
     }
 
     // Needed to circumvent overflow protection
-    if num_bits >= NUM_BITS {
+    if to_num_bits >= NUM_BITS {
         return value;
     }
 
-    let mask = BaseType::MAX >> (NUM_BITS - num_bits);
+    let mask = BaseType::MAX >> (NUM_BITS - to_num_bits);
     value & mask
 }
 
@@ -89,6 +89,8 @@ impl<const N: usize> Reg128Bits<N> {
     /// N 1's in the base type
     const BASE_ONES: BaseType = truncate(!0, N);
 
+    // This is actually used within the UpCast trait implementation
+    #[allow(unused)]
     const TOP_BIT_MASK: BaseType = top_bit_mask(N);
 
     /// A guarenteed N sequential 0's

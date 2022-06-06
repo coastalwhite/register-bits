@@ -75,6 +75,8 @@ impl<const N: usize> PlaceholderStructName<N> {
     /// N 1's in the base type
     const BASE_ONES: BaseType = truncate(!0, N);
 
+    // This is actually used within the UpCast trait implementation
+    #[allow(unused)]
     const TOP_BIT_MASK: BaseType = top_bit_mask(N);
 
     /// A guarenteed N sequential 0's
