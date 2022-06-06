@@ -1,3 +1,5 @@
+pub mod prelude;
+
 #[cfg(feature = "8bit")]
 pub mod reg8;
 #[cfg(feature = "16bit")]
