@@ -1,3 +1,5 @@
+#![no_std]
+
 pub mod prelude;
 
 #[cfg(feature = "8bit")]
@@ -8,8 +10,6 @@ pub mod reg16;
 pub mod reg32;
 #[cfg(feature = "64bit")]
 pub mod reg64;
-#[cfg(feature = "128bit")]
-pub mod reg128;
 
 #[cfg(test)]
 mod reg_reference;

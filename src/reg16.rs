@@ -25,7 +25,7 @@ impl<const N: usize> core::ops::Deref for Reg16Bits<N> {
 
 impl<const N: usize> Eq for Reg16Bits<N> {}
 impl<const N: usize> Ord for Reg16Bits<N> {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
         self.0.cmp(&other.0)
     }
 }
@@ -71,7 +71,7 @@ const fn top_bit_mask(num_bits: usize) -> BaseType {
     if num_bits > NUM_BITS {
         return 0;
     }
-    
+
     1 << (NUM_BITS - 1)
 }
 
@@ -236,7 +236,7 @@ impl<const N: usize> core::ops::Not for Reg16Bits<N> {
 
 impl<const N: usize, T> core::ops::Shl<T> for Reg16Bits<N>
 where
-    BaseType: core::ops::Shl<T, Output = BaseType>
+    BaseType: core::ops::Shl<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -251,7 +251,7 @@ where
 
 impl<const N: usize, T> core::ops::Shr<T> for Reg16Bits<N>
 where
-    BaseType: core::ops::Shr<T, Output = BaseType>
+    BaseType: core::ops::Shr<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -290,7 +290,8 @@ pub trait Reg16BitsUpCast<const T: usize>: Copy + Into<BaseType> {
         let value = self.into();
 
         let top_bit = value & Reg16Bits::<T>::TOP_BIT_MASK; // Capture only the top bit
-        let top_bits = if top_bit == 0 { // Create a set of NUM_BITS-N bits of with the given sign
+        let top_bits = if top_bit == 0 {
+            // Create a set of NUM_BITS-N bits of with the given sign
             0
         } else {
             !Reg16Bits::<T>::BASE_ONES // !001111 = 110000
@@ -300,7 +301,9 @@ pub trait Reg16BitsUpCast<const T: usize>: Copy + Into<BaseType> {
     }
 }
 
-pub trait Reg16BitsConcat<const R: usize, const O: usize>: Copy + Into<BaseType> {
+pub trait Reg16BitsConcat<const R: usize, const O: usize>:
+    Copy + Into<BaseType>
+{
     fn concat(self, rhs: Reg16Bits<R>) -> Reg16Bits<O> {
         let lhs = self.into();
         let rhs: BaseType = rhs.into();
@@ -309,9 +312,8 @@ pub trait Reg16BitsConcat<const R: usize, const O: usize>: Copy + Into<BaseType>
     }
 }
 
-impl<const F: usize, const T: usize> Reg16BitsUpCast<T> for Reg16Bits<F>
-where
-    Reg16Bits<T>: Reg16BitsDownCast<F>,
+impl<const F: usize, const T: usize> Reg16BitsUpCast<T> for Reg16Bits<F> where
+    Reg16Bits<T>: Reg16BitsDownCast<F>
 {
 }
 
@@ -322,6 +324,34 @@ impl Reg16BitsDownCast<1> for Reg16Bits<1> {}
 #[doc(hidden)]
 impl Reg16BitsConcat<1, 2> for Reg16Bits<1> {}
 #[doc(hidden)]
+impl Reg16BitsConcat<2, 3> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<3, 4> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<4, 5> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<5, 6> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<6, 7> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<7, 8> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<8, 9> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<9, 10> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<10, 11> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<11, 12> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<12, 13> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<13, 14> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<14, 15> for Reg16Bits<1> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<15, 16> for Reg16Bits<1> {}
+#[doc(hidden)]
 impl Reg16BitsDownCast<1> for Reg16Bits<2> {}
 #[doc(hidden)]
 impl Reg16BitsConcat<1, 3> for Reg16Bits<2> {}
@@ -329,6 +359,30 @@ impl Reg16BitsConcat<1, 3> for Reg16Bits<2> {}
 impl Reg16BitsDownCast<2> for Reg16Bits<2> {}
 #[doc(hidden)]
 impl Reg16BitsConcat<2, 4> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<3, 5> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<4, 6> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<5, 7> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<6, 8> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<7, 9> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<8, 10> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<9, 11> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<10, 12> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<11, 13> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<12, 14> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<13, 15> for Reg16Bits<2> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<14, 16> for Reg16Bits<2> {}
 #[doc(hidden)]
 impl Reg16BitsDownCast<1> for Reg16Bits<3> {}
 #[doc(hidden)]
@@ -341,6 +395,26 @@ impl Reg16BitsConcat<2, 5> for Reg16Bits<3> {}
 impl Reg16BitsDownCast<3> for Reg16Bits<3> {}
 #[doc(hidden)]
 impl Reg16BitsConcat<3, 6> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<4, 7> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<5, 8> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<6, 9> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<7, 10> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<8, 11> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<9, 12> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<10, 13> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<11, 14> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<12, 15> for Reg16Bits<3> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<13, 16> for Reg16Bits<3> {}
 #[doc(hidden)]
 impl Reg16BitsDownCast<1> for Reg16Bits<4> {}
 #[doc(hidden)]
@@ -357,6 +431,22 @@ impl Reg16BitsConcat<3, 7> for Reg16Bits<4> {}
 impl Reg16BitsDownCast<4> for Reg16Bits<4> {}
 #[doc(hidden)]
 impl Reg16BitsConcat<4, 8> for Reg16Bits<4> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<5, 9> for Reg16Bits<4> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<6, 10> for Reg16Bits<4> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<7, 11> for Reg16Bits<4> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<8, 12> for Reg16Bits<4> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<9, 13> for Reg16Bits<4> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<10, 14> for Reg16Bits<4> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<11, 15> for Reg16Bits<4> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<12, 16> for Reg16Bits<4> {}
 #[doc(hidden)]
 impl Reg16BitsDownCast<1> for Reg16Bits<5> {}
 #[doc(hidden)]
@@ -377,6 +467,18 @@ impl Reg16BitsConcat<4, 9> for Reg16Bits<5> {}
 impl Reg16BitsDownCast<5> for Reg16Bits<5> {}
 #[doc(hidden)]
 impl Reg16BitsConcat<5, 10> for Reg16Bits<5> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<6, 11> for Reg16Bits<5> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<7, 12> for Reg16Bits<5> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<8, 13> for Reg16Bits<5> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<9, 14> for Reg16Bits<5> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<10, 15> for Reg16Bits<5> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<11, 16> for Reg16Bits<5> {}
 #[doc(hidden)]
 impl Reg16BitsDownCast<1> for Reg16Bits<6> {}
 #[doc(hidden)]
@@ -401,6 +503,14 @@ impl Reg16BitsConcat<5, 11> for Reg16Bits<6> {}
 impl Reg16BitsDownCast<6> for Reg16Bits<6> {}
 #[doc(hidden)]
 impl Reg16BitsConcat<6, 12> for Reg16Bits<6> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<7, 13> for Reg16Bits<6> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<8, 14> for Reg16Bits<6> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<9, 15> for Reg16Bits<6> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<10, 16> for Reg16Bits<6> {}
 #[doc(hidden)]
 impl Reg16BitsDownCast<1> for Reg16Bits<7> {}
 #[doc(hidden)]
@@ -429,6 +539,10 @@ impl Reg16BitsConcat<6, 13> for Reg16Bits<7> {}
 impl Reg16BitsDownCast<7> for Reg16Bits<7> {}
 #[doc(hidden)]
 impl Reg16BitsConcat<7, 14> for Reg16Bits<7> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<8, 15> for Reg16Bits<7> {}
+#[doc(hidden)]
+impl Reg16BitsConcat<9, 16> for Reg16Bits<7> {}
 #[doc(hidden)]
 impl Reg16BitsDownCast<1> for Reg16Bits<8> {}
 #[doc(hidden)]
@@ -717,3 +831,93 @@ impl Reg16BitsDownCast<14> for Reg16Bits<16> {}
 impl Reg16BitsDownCast<15> for Reg16Bits<16> {}
 #[doc(hidden)]
 impl Reg16BitsDownCast<16> for Reg16Bits<16> {}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<2> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<3> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<4> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<5> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<6> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<7> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<8> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<9> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<10> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<11> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<12> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<13> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<14> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<15> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg16Bits<16> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}

@@ -18,7 +18,7 @@ impl<const N: usize> core::ops::Deref for PlaceholderStructName<N> {
 
 impl<const N: usize> Eq for PlaceholderStructName<N> {}
 impl<const N: usize> Ord for PlaceholderStructName<N> {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
         self.0.cmp(&other.0)
     }
 }
@@ -64,7 +64,7 @@ const fn top_bit_mask(num_bits: usize) -> BaseType {
     if num_bits > NUM_BITS {
         return 0;
     }
-    
+
     1 << (NUM_BITS - 1)
 }
 
@@ -229,7 +229,7 @@ impl<const N: usize> core::ops::Not for PlaceholderStructName<N> {
 
 impl<const N: usize, T> core::ops::Shl<T> for PlaceholderStructName<N>
 where
-    BaseType: core::ops::Shl<T, Output = BaseType>
+    BaseType: core::ops::Shl<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -244,7 +244,7 @@ where
 
 impl<const N: usize, T> core::ops::Shr<T> for PlaceholderStructName<N>
 where
-    BaseType: core::ops::Shr<T, Output = BaseType>
+    BaseType: core::ops::Shr<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -283,7 +283,8 @@ pub trait PlaceholderStructNameUpCast<const T: usize>: Copy + Into<BaseType> {
         let value = self.into();
 
         let top_bit = value & PlaceholderStructName::<T>::TOP_BIT_MASK; // Capture only the top bit
-        let top_bits = if top_bit == 0 { // Create a set of NUM_BITS-N bits of with the given sign
+        let top_bits = if top_bit == 0 {
+            // Create a set of NUM_BITS-N bits of with the given sign
             0
         } else {
             !PlaceholderStructName::<T>::BASE_ONES // !001111 = 110000
@@ -293,7 +294,9 @@ pub trait PlaceholderStructNameUpCast<const T: usize>: Copy + Into<BaseType> {
     }
 }
 
-pub trait PlaceholderStructNameConcat<const R: usize, const O: usize>: Copy + Into<BaseType> {
+pub trait PlaceholderStructNameConcat<const R: usize, const O: usize>:
+    Copy + Into<BaseType>
+{
     fn concat(self, rhs: PlaceholderStructName<R>) -> PlaceholderStructName<O> {
         let lhs = self.into();
         let rhs: BaseType = rhs.into();
@@ -302,9 +305,8 @@ pub trait PlaceholderStructNameConcat<const R: usize, const O: usize>: Copy + In
     }
 }
 
-impl<const F: usize, const T: usize> PlaceholderStructNameUpCast<T> for PlaceholderStructName<F>
-where
-    PlaceholderStructName<T>: PlaceholderStructNameDownCast<F>,
+impl<const F: usize, const T: usize> PlaceholderStructNameUpCast<T> for PlaceholderStructName<F> where
+    PlaceholderStructName<T>: PlaceholderStructNameDownCast<F>
 {
 }
 
@@ -369,7 +371,6 @@ mod tests {
         assert_eq!(imm3.get(2).unwrap(), 0);
         assert_eq!(imm3.get(1).unwrap(), 0);
         assert_eq!(imm3.get(0).unwrap(), 1);
-
     }
 
     #[test]
@@ -394,7 +395,10 @@ mod tests {
 
     #[test]
     fn bits_sub() {
-        assert_eq!(Bits::new(0x0000_0000) - Bits::new(0x0000_0001), Bits(0xFFFF_FFFF));
+        assert_eq!(
+            Bits::new(0x0000_0000) - Bits::new(0x0000_0001),
+            Bits(0xFFFF_FFFF)
+        );
         assert_eq!(Bits::<4>(2) - Bits::<4>(3), Bits::<4>(15));
         assert_eq!(Bits::<4>(15) - Bits::<4>(1), Bits::<4>(14));
     }
@@ -407,7 +411,10 @@ mod tests {
 
     #[test]
     fn bits_rem() {
-        assert_eq!(Bits::<NUM_BITS>::ONES % Bits::new(15), Bits(Bits::<NUM_BITS>::BASE_ONES % 15));
+        assert_eq!(
+            Bits::<NUM_BITS>::ONES % Bits::new(15),
+            Bits(Bits::<NUM_BITS>::BASE_ONES % 15)
+        );
         assert_eq!(Bits::<4>(5) % Bits::<4>(3), Bits::<4>(5 % 3));
     }
 
@@ -428,4 +435,3 @@ mod tests {
         assert_eq!(Bits::<4>(0b1010) >> 1, Bits::<4>(0b0101));
     }
 }
-

@@ -20,13 +20,18 @@ COMMENTS = """
 // 3. Implementation of traits
 """.strip()
 
+BASE_TYPE_EQ = """
+impl PartialEq<BaseType> for PlaceholderStructName<i> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+"""
+
 def i_geq_j(_, i, j):
     return i >= j
 
 def sum_of_sizes(size, i, j):
-    if i < j:
-        return None
-
     if i + j <= size:
         return i + j
 
@@ -39,7 +44,7 @@ trait_1arg_impls = {
     "DownCast": i_geq_j,
 }
 
-sizes = [ 8, 16, 32, 64, 128 ]
+sizes = [ 8, 16, 32, 64 ]
 
 def get_1arg_impl_string(struct, trait, x, y):
     return "impl {struct}{trait}<{y}> for {struct}<{x}> {{}}".format(
@@ -131,6 +136,13 @@ with open(REFERENCE_FILE, 'r') as ref_file:
                         filled_txt += "\n"
                         filled_txt += get_2arg_impl_string(replace_struct_name, trait_name, i, j, outcome)
                         filled_txt += "\n"
+
+        
+        for i in range(2, size+1):
+            filled_txt += DOC_HIDDEN
+            filled_txt += "\n"
+            filled_txt += BASE_TYPE_EQ.strip().replace(STRUCT_BASE_NAME, replace_struct_name).replace('<i>', '<{}>'.format(i))
+            filled_txt += "\n"
             
         target_filename = 'src/reg{size}.rs'.format(size=size)
         with open(target_filename, 'w') as target_file:

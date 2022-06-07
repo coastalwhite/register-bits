@@ -25,7 +25,7 @@ impl<const N: usize> core::ops::Deref for Reg32Bits<N> {
 
 impl<const N: usize> Eq for Reg32Bits<N> {}
 impl<const N: usize> Ord for Reg32Bits<N> {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
         self.0.cmp(&other.0)
     }
 }
@@ -71,7 +71,7 @@ const fn top_bit_mask(num_bits: usize) -> BaseType {
     if num_bits > NUM_BITS {
         return 0;
     }
-    
+
     1 << (NUM_BITS - 1)
 }
 
@@ -236,7 +236,7 @@ impl<const N: usize> core::ops::Not for Reg32Bits<N> {
 
 impl<const N: usize, T> core::ops::Shl<T> for Reg32Bits<N>
 where
-    BaseType: core::ops::Shl<T, Output = BaseType>
+    BaseType: core::ops::Shl<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -251,7 +251,7 @@ where
 
 impl<const N: usize, T> core::ops::Shr<T> for Reg32Bits<N>
 where
-    BaseType: core::ops::Shr<T, Output = BaseType>
+    BaseType: core::ops::Shr<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -290,7 +290,8 @@ pub trait Reg32BitsUpCast<const T: usize>: Copy + Into<BaseType> {
         let value = self.into();
 
         let top_bit = value & Reg32Bits::<T>::TOP_BIT_MASK; // Capture only the top bit
-        let top_bits = if top_bit == 0 { // Create a set of NUM_BITS-N bits of with the given sign
+        let top_bits = if top_bit == 0 {
+            // Create a set of NUM_BITS-N bits of with the given sign
             0
         } else {
             !Reg32Bits::<T>::BASE_ONES // !001111 = 110000
@@ -300,7 +301,9 @@ pub trait Reg32BitsUpCast<const T: usize>: Copy + Into<BaseType> {
     }
 }
 
-pub trait Reg32BitsConcat<const R: usize, const O: usize>: Copy + Into<BaseType> {
+pub trait Reg32BitsConcat<const R: usize, const O: usize>:
+    Copy + Into<BaseType>
+{
     fn concat(self, rhs: Reg32Bits<R>) -> Reg32Bits<O> {
         let lhs = self.into();
         let rhs: BaseType = rhs.into();
@@ -309,9 +312,8 @@ pub trait Reg32BitsConcat<const R: usize, const O: usize>: Copy + Into<BaseType>
     }
 }
 
-impl<const F: usize, const T: usize> Reg32BitsUpCast<T> for Reg32Bits<F>
-where
-    Reg32Bits<T>: Reg32BitsDownCast<F>,
+impl<const F: usize, const T: usize> Reg32BitsUpCast<T> for Reg32Bits<F> where
+    Reg32Bits<T>: Reg32BitsDownCast<F>
 {
 }
 
@@ -322,6 +324,66 @@ impl Reg32BitsDownCast<1> for Reg32Bits<1> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<1, 2> for Reg32Bits<1> {}
 #[doc(hidden)]
+impl Reg32BitsConcat<2, 3> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<3, 4> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<4, 5> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<5, 6> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<6, 7> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<7, 8> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<8, 9> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<9, 10> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 11> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 12> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 13> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 14> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 15> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 16> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 17> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 18> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 19> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 20> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 21> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 22> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 23> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 24> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<24, 25> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<25, 26> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<26, 27> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<27, 28> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<28, 29> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<29, 30> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<30, 31> for Reg32Bits<1> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<31, 32> for Reg32Bits<1> {}
+#[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<2> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<1, 3> for Reg32Bits<2> {}
@@ -329,6 +391,62 @@ impl Reg32BitsConcat<1, 3> for Reg32Bits<2> {}
 impl Reg32BitsDownCast<2> for Reg32Bits<2> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<2, 4> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<3, 5> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<4, 6> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<5, 7> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<6, 8> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<7, 9> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<8, 10> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<9, 11> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 12> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 13> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 14> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 15> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 16> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 17> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 18> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 19> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 20> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 21> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 22> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 23> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 24> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 25> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<24, 26> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<25, 27> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<26, 28> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<27, 29> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<28, 30> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<29, 31> for Reg32Bits<2> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<30, 32> for Reg32Bits<2> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<3> {}
 #[doc(hidden)]
@@ -341,6 +459,58 @@ impl Reg32BitsConcat<2, 5> for Reg32Bits<3> {}
 impl Reg32BitsDownCast<3> for Reg32Bits<3> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<3, 6> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<4, 7> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<5, 8> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<6, 9> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<7, 10> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<8, 11> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<9, 12> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 13> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 14> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 15> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 16> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 17> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 18> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 19> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 20> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 21> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 22> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 23> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 24> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 25> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 26> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<24, 27> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<25, 28> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<26, 29> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<27, 30> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<28, 31> for Reg32Bits<3> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<29, 32> for Reg32Bits<3> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<4> {}
 #[doc(hidden)]
@@ -357,6 +527,54 @@ impl Reg32BitsConcat<3, 7> for Reg32Bits<4> {}
 impl Reg32BitsDownCast<4> for Reg32Bits<4> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<4, 8> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<5, 9> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<6, 10> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<7, 11> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<8, 12> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<9, 13> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 14> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 15> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 16> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 17> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 18> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 19> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 20> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 21> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 22> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 23> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 24> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 25> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 26> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 27> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<24, 28> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<25, 29> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<26, 30> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<27, 31> for Reg32Bits<4> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<28, 32> for Reg32Bits<4> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<5> {}
 #[doc(hidden)]
@@ -377,6 +595,50 @@ impl Reg32BitsConcat<4, 9> for Reg32Bits<5> {}
 impl Reg32BitsDownCast<5> for Reg32Bits<5> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<5, 10> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<6, 11> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<7, 12> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<8, 13> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<9, 14> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 15> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 16> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 17> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 18> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 19> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 20> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 21> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 22> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 23> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 24> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 25> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 26> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 27> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 28> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<24, 29> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<25, 30> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<26, 31> for Reg32Bits<5> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<27, 32> for Reg32Bits<5> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<6> {}
 #[doc(hidden)]
@@ -401,6 +663,46 @@ impl Reg32BitsConcat<5, 11> for Reg32Bits<6> {}
 impl Reg32BitsDownCast<6> for Reg32Bits<6> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<6, 12> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<7, 13> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<8, 14> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<9, 15> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 16> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 17> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 18> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 19> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 20> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 21> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 22> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 23> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 24> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 25> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 26> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 27> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 28> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 29> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<24, 30> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<25, 31> for Reg32Bits<6> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<26, 32> for Reg32Bits<6> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<7> {}
 #[doc(hidden)]
@@ -429,6 +731,42 @@ impl Reg32BitsConcat<6, 13> for Reg32Bits<7> {}
 impl Reg32BitsDownCast<7> for Reg32Bits<7> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<7, 14> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<8, 15> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<9, 16> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 17> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 18> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 19> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 20> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 21> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 22> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 23> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 24> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 25> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 26> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 27> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 28> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 29> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 30> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<24, 31> for Reg32Bits<7> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<25, 32> for Reg32Bits<7> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<8> {}
 #[doc(hidden)]
@@ -461,6 +799,38 @@ impl Reg32BitsConcat<7, 15> for Reg32Bits<8> {}
 impl Reg32BitsDownCast<8> for Reg32Bits<8> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<8, 16> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<9, 17> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 18> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 19> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 20> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 21> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 22> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 23> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 24> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 25> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 26> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 27> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 28> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 29> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 30> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 31> for Reg32Bits<8> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<24, 32> for Reg32Bits<8> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<9> {}
 #[doc(hidden)]
@@ -497,6 +867,34 @@ impl Reg32BitsConcat<8, 17> for Reg32Bits<9> {}
 impl Reg32BitsDownCast<9> for Reg32Bits<9> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<9, 18> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<10, 19> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 20> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 21> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 22> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 23> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 24> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 25> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 26> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 27> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 28> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 29> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 30> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 31> for Reg32Bits<9> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<23, 32> for Reg32Bits<9> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<10> {}
 #[doc(hidden)]
@@ -537,6 +935,30 @@ impl Reg32BitsConcat<9, 19> for Reg32Bits<10> {}
 impl Reg32BitsDownCast<10> for Reg32Bits<10> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<10, 20> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<11, 21> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 22> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 23> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 24> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 25> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 26> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 27> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 28> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 29> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 30> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 31> for Reg32Bits<10> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<22, 32> for Reg32Bits<10> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<11> {}
 #[doc(hidden)]
@@ -581,6 +1003,26 @@ impl Reg32BitsConcat<10, 21> for Reg32Bits<11> {}
 impl Reg32BitsDownCast<11> for Reg32Bits<11> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<11, 22> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<12, 23> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 24> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 25> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 26> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 27> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 28> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 29> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 30> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 31> for Reg32Bits<11> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<21, 32> for Reg32Bits<11> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<12> {}
 #[doc(hidden)]
@@ -629,6 +1071,22 @@ impl Reg32BitsConcat<11, 23> for Reg32Bits<12> {}
 impl Reg32BitsDownCast<12> for Reg32Bits<12> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<12, 24> for Reg32Bits<12> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<13, 25> for Reg32Bits<12> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 26> for Reg32Bits<12> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 27> for Reg32Bits<12> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 28> for Reg32Bits<12> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 29> for Reg32Bits<12> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 30> for Reg32Bits<12> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 31> for Reg32Bits<12> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<20, 32> for Reg32Bits<12> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<13> {}
 #[doc(hidden)]
@@ -681,6 +1139,18 @@ impl Reg32BitsConcat<12, 25> for Reg32Bits<13> {}
 impl Reg32BitsDownCast<13> for Reg32Bits<13> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<13, 26> for Reg32Bits<13> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<14, 27> for Reg32Bits<13> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 28> for Reg32Bits<13> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 29> for Reg32Bits<13> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 30> for Reg32Bits<13> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 31> for Reg32Bits<13> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<19, 32> for Reg32Bits<13> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<14> {}
 #[doc(hidden)]
@@ -737,6 +1207,14 @@ impl Reg32BitsConcat<13, 27> for Reg32Bits<14> {}
 impl Reg32BitsDownCast<14> for Reg32Bits<14> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<14, 28> for Reg32Bits<14> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<15, 29> for Reg32Bits<14> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 30> for Reg32Bits<14> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 31> for Reg32Bits<14> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<18, 32> for Reg32Bits<14> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<15> {}
 #[doc(hidden)]
@@ -797,6 +1275,10 @@ impl Reg32BitsConcat<14, 29> for Reg32Bits<15> {}
 impl Reg32BitsDownCast<15> for Reg32Bits<15> {}
 #[doc(hidden)]
 impl Reg32BitsConcat<15, 30> for Reg32Bits<15> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<16, 31> for Reg32Bits<15> {}
+#[doc(hidden)]
+impl Reg32BitsConcat<17, 32> for Reg32Bits<15> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<1> for Reg32Bits<16> {}
 #[doc(hidden)]
@@ -1885,3 +2367,189 @@ impl Reg32BitsDownCast<30> for Reg32Bits<32> {}
 impl Reg32BitsDownCast<31> for Reg32Bits<32> {}
 #[doc(hidden)]
 impl Reg32BitsDownCast<32> for Reg32Bits<32> {}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<2> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<3> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<4> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<5> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<6> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<7> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<8> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<9> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<10> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<11> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<12> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<13> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<14> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<15> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<16> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<17> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<18> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<19> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<20> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<21> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<22> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<23> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<24> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<25> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<26> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<27> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<28> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<29> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<30> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<31> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg32Bits<32> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}

@@ -25,7 +25,7 @@ impl<const N: usize> core::ops::Deref for Reg8Bits<N> {
 
 impl<const N: usize> Eq for Reg8Bits<N> {}
 impl<const N: usize> Ord for Reg8Bits<N> {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
         self.0.cmp(&other.0)
     }
 }
@@ -71,7 +71,7 @@ const fn top_bit_mask(num_bits: usize) -> BaseType {
     if num_bits > NUM_BITS {
         return 0;
     }
-    
+
     1 << (NUM_BITS - 1)
 }
 
@@ -236,7 +236,7 @@ impl<const N: usize> core::ops::Not for Reg8Bits<N> {
 
 impl<const N: usize, T> core::ops::Shl<T> for Reg8Bits<N>
 where
-    BaseType: core::ops::Shl<T, Output = BaseType>
+    BaseType: core::ops::Shl<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -251,7 +251,7 @@ where
 
 impl<const N: usize, T> core::ops::Shr<T> for Reg8Bits<N>
 where
-    BaseType: core::ops::Shr<T, Output = BaseType>
+    BaseType: core::ops::Shr<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -290,7 +290,8 @@ pub trait Reg8BitsUpCast<const T: usize>: Copy + Into<BaseType> {
         let value = self.into();
 
         let top_bit = value & Reg8Bits::<T>::TOP_BIT_MASK; // Capture only the top bit
-        let top_bits = if top_bit == 0 { // Create a set of NUM_BITS-N bits of with the given sign
+        let top_bits = if top_bit == 0 {
+            // Create a set of NUM_BITS-N bits of with the given sign
             0
         } else {
             !Reg8Bits::<T>::BASE_ONES // !001111 = 110000
@@ -300,7 +301,9 @@ pub trait Reg8BitsUpCast<const T: usize>: Copy + Into<BaseType> {
     }
 }
 
-pub trait Reg8BitsConcat<const R: usize, const O: usize>: Copy + Into<BaseType> {
+pub trait Reg8BitsConcat<const R: usize, const O: usize>:
+    Copy + Into<BaseType>
+{
     fn concat(self, rhs: Reg8Bits<R>) -> Reg8Bits<O> {
         let lhs = self.into();
         let rhs: BaseType = rhs.into();
@@ -309,9 +312,8 @@ pub trait Reg8BitsConcat<const R: usize, const O: usize>: Copy + Into<BaseType> 
     }
 }
 
-impl<const F: usize, const T: usize> Reg8BitsUpCast<T> for Reg8Bits<F>
-where
-    Reg8Bits<T>: Reg8BitsDownCast<F>,
+impl<const F: usize, const T: usize> Reg8BitsUpCast<T> for Reg8Bits<F> where
+    Reg8Bits<T>: Reg8BitsDownCast<F>
 {
 }
 
@@ -322,6 +324,18 @@ impl Reg8BitsDownCast<1> for Reg8Bits<1> {}
 #[doc(hidden)]
 impl Reg8BitsConcat<1, 2> for Reg8Bits<1> {}
 #[doc(hidden)]
+impl Reg8BitsConcat<2, 3> for Reg8Bits<1> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<3, 4> for Reg8Bits<1> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<4, 5> for Reg8Bits<1> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<5, 6> for Reg8Bits<1> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<6, 7> for Reg8Bits<1> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<7, 8> for Reg8Bits<1> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<2> {}
 #[doc(hidden)]
 impl Reg8BitsConcat<1, 3> for Reg8Bits<2> {}
@@ -329,6 +343,14 @@ impl Reg8BitsConcat<1, 3> for Reg8Bits<2> {}
 impl Reg8BitsDownCast<2> for Reg8Bits<2> {}
 #[doc(hidden)]
 impl Reg8BitsConcat<2, 4> for Reg8Bits<2> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<3, 5> for Reg8Bits<2> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<4, 6> for Reg8Bits<2> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<5, 7> for Reg8Bits<2> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<6, 8> for Reg8Bits<2> {}
 #[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<3> {}
 #[doc(hidden)]
@@ -341,6 +363,10 @@ impl Reg8BitsConcat<2, 5> for Reg8Bits<3> {}
 impl Reg8BitsDownCast<3> for Reg8Bits<3> {}
 #[doc(hidden)]
 impl Reg8BitsConcat<3, 6> for Reg8Bits<3> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<4, 7> for Reg8Bits<3> {}
+#[doc(hidden)]
+impl Reg8BitsConcat<5, 8> for Reg8Bits<3> {}
 #[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<4> {}
 #[doc(hidden)]
@@ -421,3 +447,45 @@ impl Reg8BitsDownCast<6> for Reg8Bits<8> {}
 impl Reg8BitsDownCast<7> for Reg8Bits<8> {}
 #[doc(hidden)]
 impl Reg8BitsDownCast<8> for Reg8Bits<8> {}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg8Bits<2> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg8Bits<3> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg8Bits<4> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg8Bits<5> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg8Bits<6> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg8Bits<7> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg8Bits<8> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}

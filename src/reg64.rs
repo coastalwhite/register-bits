@@ -25,7 +25,7 @@ impl<const N: usize> core::ops::Deref for Reg64Bits<N> {
 
 impl<const N: usize> Eq for Reg64Bits<N> {}
 impl<const N: usize> Ord for Reg64Bits<N> {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
         self.0.cmp(&other.0)
     }
 }
@@ -71,7 +71,7 @@ const fn top_bit_mask(num_bits: usize) -> BaseType {
     if num_bits > NUM_BITS {
         return 0;
     }
-    
+
     1 << (NUM_BITS - 1)
 }
 
@@ -236,7 +236,7 @@ impl<const N: usize> core::ops::Not for Reg64Bits<N> {
 
 impl<const N: usize, T> core::ops::Shl<T> for Reg64Bits<N>
 where
-    BaseType: core::ops::Shl<T, Output = BaseType>
+    BaseType: core::ops::Shl<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -251,7 +251,7 @@ where
 
 impl<const N: usize, T> core::ops::Shr<T> for Reg64Bits<N>
 where
-    BaseType: core::ops::Shr<T, Output = BaseType>
+    BaseType: core::ops::Shr<T, Output = BaseType>,
 {
     type Output = Self;
 
@@ -290,7 +290,8 @@ pub trait Reg64BitsUpCast<const T: usize>: Copy + Into<BaseType> {
         let value = self.into();
 
         let top_bit = value & Reg64Bits::<T>::TOP_BIT_MASK; // Capture only the top bit
-        let top_bits = if top_bit == 0 { // Create a set of NUM_BITS-N bits of with the given sign
+        let top_bits = if top_bit == 0 {
+            // Create a set of NUM_BITS-N bits of with the given sign
             0
         } else {
             !Reg64Bits::<T>::BASE_ONES // !001111 = 110000
@@ -300,7 +301,9 @@ pub trait Reg64BitsUpCast<const T: usize>: Copy + Into<BaseType> {
     }
 }
 
-pub trait Reg64BitsConcat<const R: usize, const O: usize>: Copy + Into<BaseType> {
+pub trait Reg64BitsConcat<const R: usize, const O: usize>:
+    Copy + Into<BaseType>
+{
     fn concat(self, rhs: Reg64Bits<R>) -> Reg64Bits<O> {
         let lhs = self.into();
         let rhs: BaseType = rhs.into();
@@ -309,9 +312,8 @@ pub trait Reg64BitsConcat<const R: usize, const O: usize>: Copy + Into<BaseType>
     }
 }
 
-impl<const F: usize, const T: usize> Reg64BitsUpCast<T> for Reg64Bits<F>
-where
-    Reg64Bits<T>: Reg64BitsDownCast<F>,
+impl<const F: usize, const T: usize> Reg64BitsUpCast<T> for Reg64Bits<F> where
+    Reg64Bits<T>: Reg64BitsDownCast<F>
 {
 }
 
@@ -322,6 +324,130 @@ impl Reg64BitsDownCast<1> for Reg64Bits<1> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<1, 2> for Reg64Bits<1> {}
 #[doc(hidden)]
+impl Reg64BitsConcat<2, 3> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<3, 4> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<4, 5> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<5, 6> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<6, 7> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<7, 8> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<8, 9> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<9, 10> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 11> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 12> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 13> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 14> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 15> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 16> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 17> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 18> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 19> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 20> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 21> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 22> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 23> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 24> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 25> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 26> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 27> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 28> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 29> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 30> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 31> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 32> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 33> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 34> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 35> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 36> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 37> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 38> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 39> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 40> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 41> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 42> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 43> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 44> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 45> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 46> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 47> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 48> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 49> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 50> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 51> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 52> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 53> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 54> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 55> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 56> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<56, 57> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<57, 58> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<58, 59> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<59, 60> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<60, 61> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<61, 62> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<62, 63> for Reg64Bits<1> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<63, 64> for Reg64Bits<1> {}
+#[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<2> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<1, 3> for Reg64Bits<2> {}
@@ -329,6 +455,126 @@ impl Reg64BitsConcat<1, 3> for Reg64Bits<2> {}
 impl Reg64BitsDownCast<2> for Reg64Bits<2> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<2, 4> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<3, 5> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<4, 6> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<5, 7> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<6, 8> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<7, 9> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<8, 10> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<9, 11> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 12> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 13> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 14> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 15> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 16> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 17> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 18> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 19> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 20> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 21> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 22> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 23> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 24> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 25> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 26> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 27> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 28> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 29> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 30> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 31> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 32> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 33> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 34> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 35> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 36> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 37> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 38> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 39> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 40> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 41> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 42> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 43> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 44> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 45> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 46> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 47> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 48> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 49> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 50> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 51> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 52> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 53> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 54> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 55> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 56> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 57> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<56, 58> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<57, 59> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<58, 60> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<59, 61> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<60, 62> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<61, 63> for Reg64Bits<2> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<62, 64> for Reg64Bits<2> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<3> {}
 #[doc(hidden)]
@@ -341,6 +587,122 @@ impl Reg64BitsConcat<2, 5> for Reg64Bits<3> {}
 impl Reg64BitsDownCast<3> for Reg64Bits<3> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<3, 6> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<4, 7> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<5, 8> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<6, 9> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<7, 10> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<8, 11> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<9, 12> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 13> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 14> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 15> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 16> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 17> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 18> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 19> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 20> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 21> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 22> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 23> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 24> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 25> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 26> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 27> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 28> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 29> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 30> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 31> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 32> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 33> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 34> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 35> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 36> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 37> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 38> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 39> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 40> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 41> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 42> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 43> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 44> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 45> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 46> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 47> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 48> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 49> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 50> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 51> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 52> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 53> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 54> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 55> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 56> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 57> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 58> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<56, 59> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<57, 60> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<58, 61> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<59, 62> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<60, 63> for Reg64Bits<3> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<61, 64> for Reg64Bits<3> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<4> {}
 #[doc(hidden)]
@@ -357,6 +719,118 @@ impl Reg64BitsConcat<3, 7> for Reg64Bits<4> {}
 impl Reg64BitsDownCast<4> for Reg64Bits<4> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<4, 8> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<5, 9> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<6, 10> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<7, 11> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<8, 12> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<9, 13> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 14> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 15> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 16> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 17> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 18> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 19> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 20> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 21> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 22> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 23> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 24> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 25> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 26> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 27> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 28> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 29> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 30> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 31> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 32> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 33> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 34> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 35> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 36> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 37> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 38> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 39> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 40> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 41> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 42> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 43> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 44> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 45> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 46> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 47> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 48> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 49> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 50> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 51> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 52> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 53> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 54> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 55> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 56> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 57> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 58> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 59> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<56, 60> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<57, 61> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<58, 62> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<59, 63> for Reg64Bits<4> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<60, 64> for Reg64Bits<4> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<5> {}
 #[doc(hidden)]
@@ -377,6 +851,114 @@ impl Reg64BitsConcat<4, 9> for Reg64Bits<5> {}
 impl Reg64BitsDownCast<5> for Reg64Bits<5> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<5, 10> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<6, 11> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<7, 12> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<8, 13> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<9, 14> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 15> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 16> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 17> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 18> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 19> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 20> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 21> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 22> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 23> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 24> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 25> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 26> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 27> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 28> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 29> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 30> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 31> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 32> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 33> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 34> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 35> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 36> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 37> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 38> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 39> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 40> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 41> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 42> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 43> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 44> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 45> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 46> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 47> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 48> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 49> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 50> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 51> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 52> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 53> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 54> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 55> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 56> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 57> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 58> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 59> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 60> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<56, 61> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<57, 62> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<58, 63> for Reg64Bits<5> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<59, 64> for Reg64Bits<5> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<6> {}
 #[doc(hidden)]
@@ -401,6 +983,110 @@ impl Reg64BitsConcat<5, 11> for Reg64Bits<6> {}
 impl Reg64BitsDownCast<6> for Reg64Bits<6> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<6, 12> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<7, 13> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<8, 14> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<9, 15> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 16> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 17> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 18> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 19> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 20> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 21> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 22> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 23> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 24> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 25> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 26> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 27> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 28> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 29> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 30> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 31> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 32> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 33> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 34> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 35> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 36> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 37> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 38> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 39> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 40> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 41> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 42> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 43> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 44> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 45> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 46> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 47> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 48> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 49> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 50> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 51> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 52> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 53> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 54> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 55> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 56> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 57> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 58> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 59> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 60> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 61> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<56, 62> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<57, 63> for Reg64Bits<6> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<58, 64> for Reg64Bits<6> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<7> {}
 #[doc(hidden)]
@@ -429,6 +1115,106 @@ impl Reg64BitsConcat<6, 13> for Reg64Bits<7> {}
 impl Reg64BitsDownCast<7> for Reg64Bits<7> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<7, 14> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<8, 15> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<9, 16> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 17> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 18> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 19> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 20> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 21> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 22> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 23> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 24> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 25> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 26> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 27> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 28> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 29> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 30> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 31> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 32> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 33> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 34> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 35> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 36> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 37> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 38> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 39> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 40> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 41> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 42> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 43> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 44> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 45> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 46> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 47> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 48> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 49> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 50> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 51> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 52> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 53> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 54> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 55> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 56> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 57> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 58> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 59> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 60> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 61> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 62> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<56, 63> for Reg64Bits<7> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<57, 64> for Reg64Bits<7> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<8> {}
 #[doc(hidden)]
@@ -461,6 +1247,102 @@ impl Reg64BitsConcat<7, 15> for Reg64Bits<8> {}
 impl Reg64BitsDownCast<8> for Reg64Bits<8> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<8, 16> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<9, 17> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 18> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 19> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 20> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 21> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 22> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 23> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 24> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 25> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 26> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 27> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 28> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 29> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 30> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 31> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 32> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 33> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 34> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 35> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 36> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 37> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 38> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 39> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 40> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 41> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 42> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 43> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 44> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 45> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 46> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 47> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 48> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 49> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 50> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 51> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 52> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 53> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 54> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 55> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 56> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 57> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 58> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 59> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 60> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 61> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 62> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 63> for Reg64Bits<8> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<56, 64> for Reg64Bits<8> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<9> {}
 #[doc(hidden)]
@@ -497,6 +1379,98 @@ impl Reg64BitsConcat<8, 17> for Reg64Bits<9> {}
 impl Reg64BitsDownCast<9> for Reg64Bits<9> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<9, 18> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<10, 19> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 20> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 21> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 22> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 23> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 24> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 25> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 26> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 27> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 28> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 29> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 30> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 31> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 32> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 33> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 34> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 35> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 36> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 37> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 38> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 39> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 40> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 41> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 42> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 43> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 44> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 45> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 46> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 47> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 48> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 49> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 50> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 51> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 52> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 53> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 54> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 55> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 56> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 57> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 58> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 59> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 60> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 61> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 62> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 63> for Reg64Bits<9> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<55, 64> for Reg64Bits<9> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<10> {}
 #[doc(hidden)]
@@ -537,6 +1511,94 @@ impl Reg64BitsConcat<9, 19> for Reg64Bits<10> {}
 impl Reg64BitsDownCast<10> for Reg64Bits<10> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<10, 20> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<11, 21> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 22> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 23> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 24> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 25> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 26> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 27> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 28> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 29> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 30> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 31> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 32> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 33> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 34> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 35> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 36> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 37> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 38> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 39> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 40> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 41> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 42> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 43> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 44> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 45> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 46> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 47> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 48> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 49> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 50> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 51> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 52> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 53> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 54> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 55> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 56> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 57> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 58> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 59> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 60> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 61> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 62> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 63> for Reg64Bits<10> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<54, 64> for Reg64Bits<10> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<11> {}
 #[doc(hidden)]
@@ -581,6 +1643,90 @@ impl Reg64BitsConcat<10, 21> for Reg64Bits<11> {}
 impl Reg64BitsDownCast<11> for Reg64Bits<11> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<11, 22> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<12, 23> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 24> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 25> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 26> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 27> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 28> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 29> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 30> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 31> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 32> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 33> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 34> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 35> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 36> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 37> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 38> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 39> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 40> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 41> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 42> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 43> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 44> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 45> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 46> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 47> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 48> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 49> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 50> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 51> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 52> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 53> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 54> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 55> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 56> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 57> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 58> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 59> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 60> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 61> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 62> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 63> for Reg64Bits<11> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<53, 64> for Reg64Bits<11> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<12> {}
 #[doc(hidden)]
@@ -629,6 +1775,86 @@ impl Reg64BitsConcat<11, 23> for Reg64Bits<12> {}
 impl Reg64BitsDownCast<12> for Reg64Bits<12> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<12, 24> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<13, 25> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 26> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 27> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 28> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 29> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 30> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 31> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 32> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 33> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 34> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 35> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 36> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 37> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 38> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 39> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 40> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 41> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 42> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 43> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 44> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 45> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 46> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 47> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 48> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 49> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 50> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 51> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 52> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 53> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 54> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 55> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 56> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 57> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 58> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 59> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 60> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 61> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 62> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 63> for Reg64Bits<12> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<52, 64> for Reg64Bits<12> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<13> {}
 #[doc(hidden)]
@@ -681,6 +1907,82 @@ impl Reg64BitsConcat<12, 25> for Reg64Bits<13> {}
 impl Reg64BitsDownCast<13> for Reg64Bits<13> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<13, 26> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<14, 27> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 28> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 29> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 30> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 31> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 32> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 33> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 34> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 35> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 36> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 37> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 38> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 39> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 40> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 41> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 42> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 43> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 44> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 45> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 46> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 47> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 48> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 49> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 50> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 51> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 52> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 53> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 54> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 55> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 56> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 57> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 58> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 59> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 60> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 61> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 62> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 63> for Reg64Bits<13> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<51, 64> for Reg64Bits<13> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<14> {}
 #[doc(hidden)]
@@ -737,6 +2039,78 @@ impl Reg64BitsConcat<13, 27> for Reg64Bits<14> {}
 impl Reg64BitsDownCast<14> for Reg64Bits<14> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<14, 28> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<15, 29> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 30> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 31> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 32> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 33> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 34> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 35> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 36> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 37> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 38> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 39> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 40> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 41> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 42> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 43> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 44> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 45> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 46> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 47> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 48> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 49> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 50> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 51> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 52> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 53> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 54> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 55> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 56> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 57> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 58> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 59> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 60> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 61> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 62> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 63> for Reg64Bits<14> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<50, 64> for Reg64Bits<14> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<15> {}
 #[doc(hidden)]
@@ -797,6 +2171,74 @@ impl Reg64BitsConcat<14, 29> for Reg64Bits<15> {}
 impl Reg64BitsDownCast<15> for Reg64Bits<15> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<15, 30> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<16, 31> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 32> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 33> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 34> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 35> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 36> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 37> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 38> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 39> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 40> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 41> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 42> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 43> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 44> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 45> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 46> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 47> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 48> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 49> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 50> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 51> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 52> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 53> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 54> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 55> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 56> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 57> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 58> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 59> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 60> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 61> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 62> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 63> for Reg64Bits<15> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<49, 64> for Reg64Bits<15> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<16> {}
 #[doc(hidden)]
@@ -861,6 +2303,70 @@ impl Reg64BitsConcat<15, 31> for Reg64Bits<16> {}
 impl Reg64BitsDownCast<16> for Reg64Bits<16> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<16, 32> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<17, 33> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 34> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 35> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 36> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 37> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 38> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 39> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 40> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 41> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 42> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 43> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 44> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 45> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 46> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 47> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 48> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 49> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 50> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 51> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 52> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 53> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 54> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 55> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 56> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 57> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 58> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 59> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 60> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 61> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 62> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 63> for Reg64Bits<16> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<48, 64> for Reg64Bits<16> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<17> {}
 #[doc(hidden)]
@@ -929,6 +2435,66 @@ impl Reg64BitsConcat<16, 33> for Reg64Bits<17> {}
 impl Reg64BitsDownCast<17> for Reg64Bits<17> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<17, 34> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<18, 35> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 36> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 37> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 38> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 39> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 40> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 41> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 42> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 43> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 44> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 45> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 46> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 47> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 48> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 49> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 50> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 51> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 52> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 53> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 54> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 55> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 56> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 57> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 58> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 59> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 60> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 61> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 62> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 63> for Reg64Bits<17> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<47, 64> for Reg64Bits<17> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<18> {}
 #[doc(hidden)]
@@ -1001,6 +2567,62 @@ impl Reg64BitsConcat<17, 35> for Reg64Bits<18> {}
 impl Reg64BitsDownCast<18> for Reg64Bits<18> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<18, 36> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<19, 37> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 38> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 39> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 40> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 41> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 42> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 43> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 44> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 45> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 46> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 47> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 48> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 49> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 50> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 51> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 52> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 53> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 54> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 55> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 56> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 57> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 58> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 59> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 60> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 61> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 62> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 63> for Reg64Bits<18> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<46, 64> for Reg64Bits<18> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<19> {}
 #[doc(hidden)]
@@ -1077,6 +2699,58 @@ impl Reg64BitsConcat<18, 37> for Reg64Bits<19> {}
 impl Reg64BitsDownCast<19> for Reg64Bits<19> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<19, 38> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<20, 39> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 40> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 41> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 42> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 43> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 44> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 45> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 46> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 47> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 48> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 49> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 50> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 51> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 52> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 53> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 54> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 55> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 56> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 57> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 58> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 59> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 60> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 61> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 62> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 63> for Reg64Bits<19> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<45, 64> for Reg64Bits<19> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<20> {}
 #[doc(hidden)]
@@ -1157,6 +2831,54 @@ impl Reg64BitsConcat<19, 39> for Reg64Bits<20> {}
 impl Reg64BitsDownCast<20> for Reg64Bits<20> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<20, 40> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<21, 41> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 42> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 43> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 44> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 45> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 46> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 47> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 48> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 49> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 50> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 51> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 52> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 53> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 54> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 55> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 56> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 57> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 58> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 59> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 60> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 61> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 62> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 63> for Reg64Bits<20> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<44, 64> for Reg64Bits<20> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<21> {}
 #[doc(hidden)]
@@ -1241,6 +2963,50 @@ impl Reg64BitsConcat<20, 41> for Reg64Bits<21> {}
 impl Reg64BitsDownCast<21> for Reg64Bits<21> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<21, 42> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<22, 43> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 44> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 45> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 46> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 47> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 48> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 49> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 50> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 51> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 52> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 53> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 54> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 55> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 56> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 57> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 58> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 59> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 60> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 61> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 62> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 63> for Reg64Bits<21> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<43, 64> for Reg64Bits<21> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<22> {}
 #[doc(hidden)]
@@ -1329,6 +3095,46 @@ impl Reg64BitsConcat<21, 43> for Reg64Bits<22> {}
 impl Reg64BitsDownCast<22> for Reg64Bits<22> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<22, 44> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<23, 45> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 46> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 47> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 48> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 49> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 50> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 51> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 52> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 53> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 54> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 55> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 56> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 57> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 58> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 59> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 60> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 61> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 62> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 63> for Reg64Bits<22> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<42, 64> for Reg64Bits<22> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<23> {}
 #[doc(hidden)]
@@ -1421,6 +3227,42 @@ impl Reg64BitsConcat<22, 45> for Reg64Bits<23> {}
 impl Reg64BitsDownCast<23> for Reg64Bits<23> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<23, 46> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<24, 47> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 48> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 49> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 50> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 51> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 52> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 53> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 54> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 55> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 56> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 57> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 58> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 59> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 60> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 61> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 62> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 63> for Reg64Bits<23> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<41, 64> for Reg64Bits<23> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<24> {}
 #[doc(hidden)]
@@ -1517,6 +3359,38 @@ impl Reg64BitsConcat<23, 47> for Reg64Bits<24> {}
 impl Reg64BitsDownCast<24> for Reg64Bits<24> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<24, 48> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<25, 49> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 50> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 51> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 52> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 53> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 54> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 55> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 56> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 57> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 58> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 59> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 60> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 61> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 62> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 63> for Reg64Bits<24> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<40, 64> for Reg64Bits<24> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<25> {}
 #[doc(hidden)]
@@ -1617,6 +3491,34 @@ impl Reg64BitsConcat<24, 49> for Reg64Bits<25> {}
 impl Reg64BitsDownCast<25> for Reg64Bits<25> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<25, 50> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<26, 51> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 52> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 53> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 54> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 55> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 56> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 57> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 58> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 59> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 60> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 61> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 62> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 63> for Reg64Bits<25> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<39, 64> for Reg64Bits<25> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<26> {}
 #[doc(hidden)]
@@ -1721,6 +3623,30 @@ impl Reg64BitsConcat<25, 51> for Reg64Bits<26> {}
 impl Reg64BitsDownCast<26> for Reg64Bits<26> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<26, 52> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<27, 53> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 54> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 55> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 56> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 57> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 58> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 59> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 60> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 61> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 62> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 63> for Reg64Bits<26> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<38, 64> for Reg64Bits<26> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<27> {}
 #[doc(hidden)]
@@ -1829,6 +3755,26 @@ impl Reg64BitsConcat<26, 53> for Reg64Bits<27> {}
 impl Reg64BitsDownCast<27> for Reg64Bits<27> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<27, 54> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<28, 55> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 56> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 57> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 58> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 59> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 60> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 61> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 62> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 63> for Reg64Bits<27> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<37, 64> for Reg64Bits<27> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<28> {}
 #[doc(hidden)]
@@ -1941,6 +3887,22 @@ impl Reg64BitsConcat<27, 55> for Reg64Bits<28> {}
 impl Reg64BitsDownCast<28> for Reg64Bits<28> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<28, 56> for Reg64Bits<28> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<29, 57> for Reg64Bits<28> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 58> for Reg64Bits<28> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 59> for Reg64Bits<28> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 60> for Reg64Bits<28> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 61> for Reg64Bits<28> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 62> for Reg64Bits<28> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 63> for Reg64Bits<28> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<36, 64> for Reg64Bits<28> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<29> {}
 #[doc(hidden)]
@@ -2057,6 +4019,18 @@ impl Reg64BitsConcat<28, 57> for Reg64Bits<29> {}
 impl Reg64BitsDownCast<29> for Reg64Bits<29> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<29, 58> for Reg64Bits<29> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<30, 59> for Reg64Bits<29> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 60> for Reg64Bits<29> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 61> for Reg64Bits<29> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 62> for Reg64Bits<29> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 63> for Reg64Bits<29> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<35, 64> for Reg64Bits<29> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<30> {}
 #[doc(hidden)]
@@ -2177,6 +4151,14 @@ impl Reg64BitsConcat<29, 59> for Reg64Bits<30> {}
 impl Reg64BitsDownCast<30> for Reg64Bits<30> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<30, 60> for Reg64Bits<30> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<31, 61> for Reg64Bits<30> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 62> for Reg64Bits<30> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 63> for Reg64Bits<30> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<34, 64> for Reg64Bits<30> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<31> {}
 #[doc(hidden)]
@@ -2301,6 +4283,10 @@ impl Reg64BitsConcat<30, 61> for Reg64Bits<31> {}
 impl Reg64BitsDownCast<31> for Reg64Bits<31> {}
 #[doc(hidden)]
 impl Reg64BitsConcat<31, 62> for Reg64Bits<31> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<32, 63> for Reg64Bits<31> {}
+#[doc(hidden)]
+impl Reg64BitsConcat<33, 64> for Reg64Bits<31> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<1> for Reg64Bits<32> {}
 #[doc(hidden)]
@@ -6525,3 +8511,381 @@ impl Reg64BitsDownCast<62> for Reg64Bits<64> {}
 impl Reg64BitsDownCast<63> for Reg64Bits<64> {}
 #[doc(hidden)]
 impl Reg64BitsDownCast<64> for Reg64Bits<64> {}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<2> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<3> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<4> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<5> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<6> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<7> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<8> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<9> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<10> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<11> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<12> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<13> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<14> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<15> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<16> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<17> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<18> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<19> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<20> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<21> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<22> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<23> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<24> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<25> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<26> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<27> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<28> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<29> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<30> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<31> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<32> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<33> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<34> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<35> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<36> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<37> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<38> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<39> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<40> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<41> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<42> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<43> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<44> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<45> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<46> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<47> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<48> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<49> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<50> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<51> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<52> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<53> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<54> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<55> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<56> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<57> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<58> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<59> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<60> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<61> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<62> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<63> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
+#[doc(hidden)]
+impl PartialEq<BaseType> for Reg64Bits<64> {
+    fn eq(&self, other: &BaseType) -> bool {
+        self.0 == *other
+    }
+}
