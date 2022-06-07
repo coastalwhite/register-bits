@@ -5,13 +5,6 @@
 // 1. Definition of RegXBits struct
 // 2. Implementation of operations
 // 3. Implementation of traits
-// This file was automatically generated with the `generate_impl_rs.py` script.
-// Any bugs in this script should be addressed in the `reg_reference.rs` file.
-// 
-// The contents of this file is as follows:
-// 1. Definition of RegXBits struct
-// 2. Implementation of operations
-// 3. Implementation of traits
 use core::num::Wrapping;
 
 // The next two lines will be replaced with the appropriate base type and size
@@ -324,55 +317,107 @@ where
 
 
 
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<1> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<1, 2> for Reg8Bits<1> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<2> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<1, 3> for Reg8Bits<2> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<2> for Reg8Bits<2> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<2, 4> for Reg8Bits<2> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<3> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<1, 4> for Reg8Bits<3> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<2> for Reg8Bits<3> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<2, 5> for Reg8Bits<3> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<3> for Reg8Bits<3> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<3, 6> for Reg8Bits<3> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<4> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<1, 5> for Reg8Bits<4> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<2> for Reg8Bits<4> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<2, 6> for Reg8Bits<4> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<3> for Reg8Bits<4> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<3, 7> for Reg8Bits<4> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<4> for Reg8Bits<4> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<4, 8> for Reg8Bits<4> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<5> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<1, 6> for Reg8Bits<5> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<2> for Reg8Bits<5> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<2, 7> for Reg8Bits<5> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<3> for Reg8Bits<5> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<3, 8> for Reg8Bits<5> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<4> for Reg8Bits<5> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<5> for Reg8Bits<5> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<6> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<1, 7> for Reg8Bits<6> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<2> for Reg8Bits<6> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<2, 8> for Reg8Bits<6> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<3> for Reg8Bits<6> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<4> for Reg8Bits<6> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<5> for Reg8Bits<6> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<6> for Reg8Bits<6> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<7> {}
+#[doc(hidden)]
 impl Reg8BitsConcat<1, 8> for Reg8Bits<7> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<2> for Reg8Bits<7> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<3> for Reg8Bits<7> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<4> for Reg8Bits<7> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<5> for Reg8Bits<7> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<6> for Reg8Bits<7> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<7> for Reg8Bits<7> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<1> for Reg8Bits<8> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<2> for Reg8Bits<8> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<3> for Reg8Bits<8> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<4> for Reg8Bits<8> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<5> for Reg8Bits<8> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<6> for Reg8Bits<8> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<7> for Reg8Bits<8> {}
+#[doc(hidden)]
 impl Reg8BitsDownCast<8> for Reg8Bits<8> {}

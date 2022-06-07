@@ -6,6 +6,7 @@ FIND_SIZE = 32
 DEBUG = 0
 
 REFERENCE_FILE = 'src/reg_reference.rs'
+DOC_HIDDEN = '#[doc(hidden)]'
 
 # The comment that gets inserted at the beginning of each automatically
 # generated file.
@@ -116,6 +117,8 @@ with open(REFERENCE_FILE, 'r') as ref_file:
                 # 1 argument traits 
                 for trait_name, trait_fn in trait_1arg_impls.items():
                     if trait_fn(size, i, j):
+                        filled_txt += DOC_HIDDEN
+                        filled_txt += "\n"
                         filled_txt += get_1arg_impl_string(replace_struct_name, trait_name, i, j)
                         filled_txt += "\n"
 
@@ -124,13 +127,13 @@ with open(REFERENCE_FILE, 'r') as ref_file:
                     outcome = trait_fn(size, i, j)
 
                     if outcome != None:
+                        filled_txt += DOC_HIDDEN
+                        filled_txt += "\n"
                         filled_txt += get_2arg_impl_string(replace_struct_name, trait_name, i, j, outcome)
                         filled_txt += "\n"
             
         target_filename = 'src/reg{size}.rs'.format(size=size)
         with open(target_filename, 'w') as target_file:
-            target_file.write(COMMENTS)
-            target_file.write("\n")
             target_file.write(filled_txt)
 
         print("done")
