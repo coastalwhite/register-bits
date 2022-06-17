@@ -168,49 +168,49 @@ impl PartialEq<u8> for PlaceholderStructName<1> {
     }
 }
 
-impl<const N: usize> core::ops::Add for PlaceholderStructName<N> {
+impl<const N: usize, T: Into<BaseType>> core::ops::Add<T> for PlaceholderStructName<N> {
     type Output = Self;
 
     #[inline(always)]
-    fn add(self, rhs: Self) -> Self::Output {
+    fn add(self, rhs: T) -> Self::Output {
         let lhs = Wrapping::<BaseType>(self.0);
-        let rhs = Wrapping::<BaseType>(rhs.0);
+        let rhs = Wrapping::<BaseType>(rhs.into());
 
         Self(((lhs + rhs) & Wrapping(Self::BASE_ONES)).0)
     }
 }
 
-impl<const N: usize> core::ops::Sub for PlaceholderStructName<N> {
+impl<const N: usize, T: Into<BaseType>> core::ops::Sub<T> for PlaceholderStructName<N> {
     type Output = Self;
 
     #[inline(always)]
-    fn sub(self, rhs: Self) -> Self::Output {
+    fn sub(self, rhs: T) -> Self::Output {
         let lhs = Wrapping::<BaseType>(self.0);
-        let rhs = Wrapping::<BaseType>(rhs.0);
+        let rhs = Wrapping::<BaseType>(rhs.into());
 
         Self(((lhs - rhs) & Wrapping(Self::BASE_ONES)).0)
     }
 }
 
-impl<const N: usize> core::ops::Div for PlaceholderStructName<N> {
+impl<const N: usize, T: Into<BaseType>> core::ops::Div<T> for PlaceholderStructName<N> {
     type Output = Self;
 
     #[inline(always)]
-    fn div(self, rhs: Self) -> Self::Output {
+    fn div(self, rhs: T) -> Self::Output {
         let lhs = self.0;
-        let rhs = rhs.0;
+        let rhs = rhs.into();
 
         Self(lhs / rhs)
     }
 }
 
-impl<const N: usize> core::ops::Rem for PlaceholderStructName<N> {
+impl<const N: usize, T: Into<BaseType>> core::ops::Rem<T> for PlaceholderStructName<N> {
     type Output = Self;
 
     #[inline(always)]
-    fn rem(self, rhs: Self) -> Self::Output {
+    fn rem(self, rhs: T) -> Self::Output {
         let lhs = self.0;
-        let rhs = rhs.0;
+        let rhs = rhs.into();
 
         Self(lhs % rhs)
     }
