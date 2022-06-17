@@ -7,6 +7,7 @@
 // 3. Implementation of traits
 use core::num::Wrapping;
 
+
 // The next two lines will be replaced with the appropriate base type and size
 type BaseType = u64; // [REF_REPLACE]
 const NUM_BITS: usize = BaseType::BITS as usize;
@@ -72,7 +73,7 @@ const fn top_bit_mask(num_bits: usize) -> BaseType {
         return 0;
     }
 
-    1 << (NUM_BITS - 1)
+    1 << (num_bits - 1)
 }
 
 // Function to ease matching of Bits to a specific sequence of bits
@@ -82,27 +83,62 @@ impl<const N: usize> Reg64Bits<N> {
     /// N 1's in the base type
     const BASE_ONES: BaseType = truncate(!0, N);
 
-    // This is actually used within the UpCast trait implementation
-    #[allow(unused)]
-    const TOP_BIT_MASK: BaseType = top_bit_mask(N);
-
     /// A guarenteed N sequential 0's
     pub const ZEROS: Self = Self(Self::BASE_ZEROS);
     /// N sequential 1's
     pub const ONES: Self = Self(Self::BASE_ONES);
 
-    pub fn bits(&self) -> [u8; N] {
+    /// Turn the register bits into a array of 1s and 0s
+    ///
+    /// Can be used in both a const environment and at runtime. This function is especially useful
+    /// when pattern matching.
+    ///
+    /// ```
+    /// use register_bits::prelude::*;
+    /// let value: Reg64Bits<4> =
+    ///     Reg64Bits::new(0b1010).take_low();
+    ///
+    /// match value.bits() {
+    ///     [1, 0, 1, 0] => {
+    ///         // Wow, we matched the individual bits
+    ///     }
+    ///     _ => unreachable!(),
+    /// }
+    /// ```
+    pub const fn bits(&self) -> [u8; N] {
         let mut bits = [0; N];
         let Self(mut value) = self;
 
-        for i in 0..N {
+        let mut i = 0;
+        loop {
             bits[N - i - 1] = (value & 0b1) as u8;
             value >>= 1;
+
+            i += 1;
+            if i == N {
+                break;
+            }
         }
 
         bits
     }
 
+    /// Fetch a bit at runtime
+    /// 
+    /// This will fail if index >= N, where N is the size of the [Reg64Bits].
+    ///
+    /// ```
+    /// use register_bits::prelude::*;
+    ///
+    /// let bits: Reg64Bits<4> =
+    ///     Reg64Bits::new(0b1100).take_low();
+    ///
+    /// assert_eq!(bits.get(0).unwrap(), 0u8);
+    /// assert_eq!(bits.get(1).unwrap(), 0u8);
+    /// assert_eq!(bits.get(2).unwrap(), 1u8);
+    /// assert_eq!(bits.get(3).unwrap(), 1u8);
+    /// assert_eq!(bits.get(4), None);
+    /// ```
     pub fn get(&self, index: usize) -> Option<Reg64Bits<1>> {
         if index >= N {
             return None;
@@ -264,46 +300,134 @@ where
     }
 }
 
+pub trait Reg64BitsBitSize {
+    const BIT_SIZE: usize;
+    const BASE_ONES: BaseType;
+}
+
+impl<const N: usize> Reg64BitsBitSize for Reg64Bits<N> {
+    const BIT_SIZE: usize = N;
+    const BASE_ONES: BaseType = Reg64Bits::<N>::BASE_ONES;
+}
+
 // F > T
-pub trait Reg64BitsDownCast<const T: usize>: Copy + Into<BaseType> {
+pub trait Reg64BitsDownCast<const T: usize>: Reg64BitsBitSize + Copy + Into<BaseType> {
+    /// Take a number of the least significant bits
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use register_bits::prelude::*;
+    /// let bottom_byte: Reg64Bits<8> = Reg64Bits::new(0x42).take_low();
+    /// let bits: Reg64Bits<4> = bottom_byte.take_low();
+    ///
+    /// assert_eq!(bits, 0x2);
+    /// ```
     #[inline(always)]
     fn take_low(self) -> Reg64Bits<T> {
         let value: BaseType = self.into();
         Reg64Bits(Reg64Bits::<T>::BASE_ONES & value)
     }
+
+    /// Take a number of the most significant bits
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use register_bits::prelude::*;
+    /// let bottom_byte: Reg64Bits<8> =
+    ///     Reg64Bits::new(0x42).take_low();
+    /// let bits: Reg64Bits<4> = bottom_byte.take_high();
+    ///
+    /// assert_eq!(bits, 0x4);
+    /// ```
     #[inline(always)]
     fn take_high(self) -> Reg64Bits<T> {
         let value: BaseType = self.into();
-        Reg64Bits(value >> (NUM_BITS - T))
+        Reg64Bits(value >> (Self::BIT_SIZE - T))
     }
 }
 
-pub trait Reg64BitsUpCast<const T: usize>: Copy + Into<BaseType> {
+pub trait Reg64BitsUpCast<const T: usize>: Reg64BitsBitSize + Copy + Into<BaseType> {
+    /// Extend the current register bits with 0s on the most significant bits
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use register_bits::prelude::*;
+    /// let bits: Reg64Bits<4> =
+    ///     Reg64Bits::new(0b1010).take_low();
+    ///
+    /// // 1010 => 0000 1010
+    /// assert_eq!(bits.zero_extend().bits(), [0, 0, 0, 0, 1, 0, 1, 0]);
+    /// ```
     #[inline(always)]
     fn zero_extend(self) -> Reg64Bits<T> {
         let value = self.into();
         Reg64Bits(value)
     }
 
+    /// Extend the current register bits by copied the most significant bit to the new bits
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use register_bits::prelude::*;
+    ///
+    /// // Most significant bit is 1
+    /// let bits: Reg64Bits<4> =
+    ///     Reg64Bits::new(0b1010).take_low();
+    ///
+    /// // 1010 => 1111 1010
+    /// assert_eq!(bits.sign_extend().bits(), [1, 1, 1, 1, 1, 0, 1, 0]);
+    ///
+    /// // Most significant bit is 0
+    /// let bits: Reg64Bits<4> =
+    ///     Reg64Bits::new(0b0101).take_low();
+    ///
+    /// // 0101 => 0000 0101
+    /// assert_eq!(bits.sign_extend().bits(), [0, 0, 0, 0, 0, 1, 0, 1]);
+    /// ```
+    #[inline(always)]
     fn sign_extend(self) -> Reg64Bits<T> {
         // NOTE: We are assuming here that no Bits<0> structure can exist
         let value = self.into();
 
-        let top_bit = value & Reg64Bits::<T>::TOP_BIT_MASK; // Capture only the top bit
+        let top_bit = value & top_bit_mask(Self::BIT_SIZE); // Capture only the top bit
         let top_bits = if top_bit == 0 {
             // Create a set of NUM_BITS-N bits of with the given sign
             0
         } else {
-            !Reg64Bits::<T>::BASE_ONES // !001111 = 110000
+            (!Self::BASE_ONES) & Reg64Bits::<T>::BASE_ONES // !001111 = 110000
         };
 
-        Reg64Bits(top_bits & value)
+        Reg64Bits(top_bits | value)
+    }
+
+    /// Add extra zeros for the least significant bits
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use register_bits::prelude::*;
+    ///
+    /// let bits: Reg64Bits<4> =
+    ///     Reg64Bits::new(0b1010).take_low();
+    ///
+    /// // 1010 => 1010 0000
+    /// assert_eq!(bits.zero_pad().bits(), [1, 0, 1, 0, 0, 0, 0, 0]);
+    /// ```
+    #[inline(always)]
+    fn zero_pad(self) -> Reg64Bits<T> {
+        self.zero_extend() << (T - Self::BIT_SIZE)
     }
 }
 
 pub trait Reg64BitsConcat<const R: usize, const O: usize>:
     Copy + Into<BaseType>
 {
+    /// Concatinate two register bit structures forming a new struct sized the sum of their
+    /// concated structs
     fn concat(self, rhs: Reg64Bits<R>) -> Reg64Bits<O> {
         let lhs = self.into();
         let rhs: BaseType = rhs.into();

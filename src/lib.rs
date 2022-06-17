@@ -17,11 +17,12 @@
 //! use register_bits::prelude::*;
 //!
 //! let value = Reg32Bits::new(0x4321_1234);
-//! let first_12bits = value.take_low::<12>::();
+//! let first_12bits: Reg32Bits<12> = value.take_low();
 //!
 //! assert_eq!(first_12bits, 0x234);
 //! ```
-#![no_std]
+// #![cfg(not(test))]
+// #![no_std]
 
 pub mod prelude;
 
