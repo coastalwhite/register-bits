@@ -1,18 +1,25 @@
 [package]
 name = "register-bits"
+authors = ["Gijs Burghoorn <me@gburghoorn.com"]
 description = "Perform register-bit manipulation which is verified at compile time"
 version = "0.1.0"
+
 edition = "2021"
+
+categories = ["encoding", "parsing"]
+keywords = ["bits", "static", "isa", "register", "compile-time"]
+
+repository = "https://github.com/coastalwhite/register-bits"
+homepage = "https://github.com/coastalwhite/register-bits"
+
+readme = "README.md"
+license = "MIT"
 
 [features]
 default = ["32bit"]
-all = ["8bit", "16bit", "32bit", "64bit", "128bit"]
+no-std = []
+all-regs = ["8bit", "16bit", "32bit", "64bit"]
 8bit = []
 16bit = []
 32bit = []
 64bit = []
-128bit = []
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
