@@ -1,5 +1,6 @@
 use core::num::Wrapping;
 
+
 // The next two lines will be replaced with the appropriate base type and size
 type BaseType = u32; // [REF_REPLACE]
 const NUM_BITS: usize = BaseType::BITS as usize;
@@ -272,12 +273,15 @@ pub trait PlaceholderStructNameDownCast<const T: usize>: Copy + Into<BaseType> {
 }
 
 pub trait PlaceholderStructNameUpCast<const T: usize>: Copy + Into<BaseType> {
+    const FROM_BIT_SIZE: usize;
+
     #[inline(always)]
     fn zero_extend(self) -> PlaceholderStructName<T> {
         let value = self.into();
         PlaceholderStructName(value)
     }
 
+    #[inline(always)]
     fn sign_extend(self) -> PlaceholderStructName<T> {
         // NOTE: We are assuming here that no Bits<0> structure can exist
         let value = self.into();
@@ -291,6 +295,11 @@ pub trait PlaceholderStructNameUpCast<const T: usize>: Copy + Into<BaseType> {
         };
 
         PlaceholderStructName(top_bits & value)
+    }
+
+    #[inline(always)]
+    fn zero_pad(self) -> PlaceholderStructName<T> {
+        self.zero_extend() << (T - Self::FROM_BIT_SIZE)
     }
 }
 
@@ -308,6 +317,7 @@ pub trait PlaceholderStructNameConcat<const R: usize, const O: usize>:
 impl<const F: usize, const T: usize> PlaceholderStructNameUpCast<T> for PlaceholderStructName<F> where
     PlaceholderStructName<T>: PlaceholderStructNameDownCast<F>
 {
+    const FROM_BIT_SIZE: usize = F;
 }
 
 // [REF_STOP]

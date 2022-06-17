@@ -1,5 +1,6 @@
 [package]
 name = "register-bits"
+description = "Perform register-bit manipulation which is verified at compile time"
 version = "0.1.0"
 edition = "2021"
 
