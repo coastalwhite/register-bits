@@ -175,49 +175,49 @@ impl PartialEq<u8> for Reg32Bits<1> {
     }
 }
 
-impl<const N: usize> core::ops::Add for Reg32Bits<N> {
+impl<const N: usize, T: Into<BaseType>> core::ops::Add<T> for Reg32Bits<N> {
     type Output = Self;
 
     #[inline(always)]
-    fn add(self, rhs: Self) -> Self::Output {
+    fn add(self, rhs: T) -> Self::Output {
         let lhs = Wrapping::<BaseType>(self.0);
-        let rhs = Wrapping::<BaseType>(rhs.0);
+        let rhs = Wrapping::<BaseType>(rhs.into());
 
         Self(((lhs + rhs) & Wrapping(Self::BASE_ONES)).0)
     }
 }
 
-impl<const N: usize> core::ops::Sub for Reg32Bits<N> {
+impl<const N: usize, T: Into<BaseType>> core::ops::Sub<T> for Reg32Bits<N> {
     type Output = Self;
 
     #[inline(always)]
-    fn sub(self, rhs: Self) -> Self::Output {
+    fn sub(self, rhs: T) -> Self::Output {
         let lhs = Wrapping::<BaseType>(self.0);
-        let rhs = Wrapping::<BaseType>(rhs.0);
+        let rhs = Wrapping::<BaseType>(rhs.into());
 
         Self(((lhs - rhs) & Wrapping(Self::BASE_ONES)).0)
     }
 }
 
-impl<const N: usize> core::ops::Div for Reg32Bits<N> {
+impl<const N: usize, T: Into<BaseType>> core::ops::Div<T> for Reg32Bits<N> {
     type Output = Self;
 
     #[inline(always)]
-    fn div(self, rhs: Self) -> Self::Output {
+    fn div(self, rhs: T) -> Self::Output {
         let lhs = self.0;
-        let rhs = rhs.0;
+        let rhs = rhs.into();
 
         Self(lhs / rhs)
     }
 }
 
-impl<const N: usize> core::ops::Rem for Reg32Bits<N> {
+impl<const N: usize, T: Into<BaseType>> core::ops::Rem<T> for Reg32Bits<N> {
     type Output = Self;
 
     #[inline(always)]
-    fn rem(self, rhs: Self) -> Self::Output {
+    fn rem(self, rhs: T) -> Self::Output {
         let lhs = self.0;
-        let rhs = rhs.0;
+        let rhs = rhs.into();
 
         Self(lhs % rhs)
     }
@@ -2675,5 +2675,773 @@ impl PartialEq<BaseType> for Reg32Bits<31> {
 impl PartialEq<BaseType> for Reg32Bits<32> {
     fn eq(&self, other: &BaseType) -> bool {
         self.0 == *other
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<1>> for crate::reg32::Reg32Bits<1> {
+    fn from(item: crate::reg8::Reg8Bits<1>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<1>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<1>> for crate::reg32::Reg32Bits<1> {
+    fn from(item: crate::reg16::Reg16Bits<1>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<1>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<1>> for crate::reg32::Reg32Bits<1> {
+    fn from(item: crate::reg64::Reg64Bits<1>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<1>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<2>> for crate::reg32::Reg32Bits<2> {
+    fn from(item: crate::reg8::Reg8Bits<2>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<2>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<2>> for crate::reg32::Reg32Bits<2> {
+    fn from(item: crate::reg16::Reg16Bits<2>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<2>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<2>> for crate::reg32::Reg32Bits<2> {
+    fn from(item: crate::reg64::Reg64Bits<2>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<2>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<3>> for crate::reg32::Reg32Bits<3> {
+    fn from(item: crate::reg8::Reg8Bits<3>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<3>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<3>> for crate::reg32::Reg32Bits<3> {
+    fn from(item: crate::reg16::Reg16Bits<3>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<3>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<3>> for crate::reg32::Reg32Bits<3> {
+    fn from(item: crate::reg64::Reg64Bits<3>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<3>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<4>> for crate::reg32::Reg32Bits<4> {
+    fn from(item: crate::reg8::Reg8Bits<4>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<4>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<4>> for crate::reg32::Reg32Bits<4> {
+    fn from(item: crate::reg16::Reg16Bits<4>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<4>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<4>> for crate::reg32::Reg32Bits<4> {
+    fn from(item: crate::reg64::Reg64Bits<4>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<4>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<5>> for crate::reg32::Reg32Bits<5> {
+    fn from(item: crate::reg8::Reg8Bits<5>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<5>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<5>> for crate::reg32::Reg32Bits<5> {
+    fn from(item: crate::reg16::Reg16Bits<5>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<5>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<5>> for crate::reg32::Reg32Bits<5> {
+    fn from(item: crate::reg64::Reg64Bits<5>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<5>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<6>> for crate::reg32::Reg32Bits<6> {
+    fn from(item: crate::reg8::Reg8Bits<6>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<6>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<6>> for crate::reg32::Reg32Bits<6> {
+    fn from(item: crate::reg16::Reg16Bits<6>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<6>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<6>> for crate::reg32::Reg32Bits<6> {
+    fn from(item: crate::reg64::Reg64Bits<6>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<6>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<7>> for crate::reg32::Reg32Bits<7> {
+    fn from(item: crate::reg8::Reg8Bits<7>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<7>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<7>> for crate::reg32::Reg32Bits<7> {
+    fn from(item: crate::reg16::Reg16Bits<7>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<7>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<7>> for crate::reg32::Reg32Bits<7> {
+    fn from(item: crate::reg64::Reg64Bits<7>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<7>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<8>> for crate::reg32::Reg32Bits<8> {
+    fn from(item: crate::reg8::Reg8Bits<8>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<8>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<8>> for crate::reg32::Reg32Bits<8> {
+    fn from(item: crate::reg16::Reg16Bits<8>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<8>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<8>> for crate::reg32::Reg32Bits<8> {
+    fn from(item: crate::reg64::Reg64Bits<8>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<8>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<9>> for crate::reg32::Reg32Bits<9> {
+    fn from(item: crate::reg8::Reg8Bits<9>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<9>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<9>> for crate::reg32::Reg32Bits<9> {
+    fn from(item: crate::reg16::Reg16Bits<9>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<9>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<9>> for crate::reg32::Reg32Bits<9> {
+    fn from(item: crate::reg64::Reg64Bits<9>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<9>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<10>> for crate::reg32::Reg32Bits<10> {
+    fn from(item: crate::reg8::Reg8Bits<10>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<10>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<10>> for crate::reg32::Reg32Bits<10> {
+    fn from(item: crate::reg16::Reg16Bits<10>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<10>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<10>> for crate::reg32::Reg32Bits<10> {
+    fn from(item: crate::reg64::Reg64Bits<10>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<10>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<11>> for crate::reg32::Reg32Bits<11> {
+    fn from(item: crate::reg8::Reg8Bits<11>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<11>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<11>> for crate::reg32::Reg32Bits<11> {
+    fn from(item: crate::reg16::Reg16Bits<11>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<11>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<11>> for crate::reg32::Reg32Bits<11> {
+    fn from(item: crate::reg64::Reg64Bits<11>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<11>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<12>> for crate::reg32::Reg32Bits<12> {
+    fn from(item: crate::reg8::Reg8Bits<12>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<12>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<12>> for crate::reg32::Reg32Bits<12> {
+    fn from(item: crate::reg16::Reg16Bits<12>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<12>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<12>> for crate::reg32::Reg32Bits<12> {
+    fn from(item: crate::reg64::Reg64Bits<12>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<12>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<13>> for crate::reg32::Reg32Bits<13> {
+    fn from(item: crate::reg8::Reg8Bits<13>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<13>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<13>> for crate::reg32::Reg32Bits<13> {
+    fn from(item: crate::reg16::Reg16Bits<13>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<13>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<13>> for crate::reg32::Reg32Bits<13> {
+    fn from(item: crate::reg64::Reg64Bits<13>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<13>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<14>> for crate::reg32::Reg32Bits<14> {
+    fn from(item: crate::reg8::Reg8Bits<14>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<14>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<14>> for crate::reg32::Reg32Bits<14> {
+    fn from(item: crate::reg16::Reg16Bits<14>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<14>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<14>> for crate::reg32::Reg32Bits<14> {
+    fn from(item: crate::reg64::Reg64Bits<14>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<14>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<15>> for crate::reg32::Reg32Bits<15> {
+    fn from(item: crate::reg8::Reg8Bits<15>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<15>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<15>> for crate::reg32::Reg32Bits<15> {
+    fn from(item: crate::reg16::Reg16Bits<15>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<15>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<15>> for crate::reg32::Reg32Bits<15> {
+    fn from(item: crate::reg64::Reg64Bits<15>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<15>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<16>> for crate::reg32::Reg32Bits<16> {
+    fn from(item: crate::reg8::Reg8Bits<16>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<16>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<16>> for crate::reg32::Reg32Bits<16> {
+    fn from(item: crate::reg16::Reg16Bits<16>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<16>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<16>> for crate::reg32::Reg32Bits<16> {
+    fn from(item: crate::reg64::Reg64Bits<16>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<16>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<17>> for crate::reg32::Reg32Bits<17> {
+    fn from(item: crate::reg8::Reg8Bits<17>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<17>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<17>> for crate::reg32::Reg32Bits<17> {
+    fn from(item: crate::reg16::Reg16Bits<17>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<17>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<17>> for crate::reg32::Reg32Bits<17> {
+    fn from(item: crate::reg64::Reg64Bits<17>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<17>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<18>> for crate::reg32::Reg32Bits<18> {
+    fn from(item: crate::reg8::Reg8Bits<18>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<18>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<18>> for crate::reg32::Reg32Bits<18> {
+    fn from(item: crate::reg16::Reg16Bits<18>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<18>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<18>> for crate::reg32::Reg32Bits<18> {
+    fn from(item: crate::reg64::Reg64Bits<18>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<18>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<19>> for crate::reg32::Reg32Bits<19> {
+    fn from(item: crate::reg8::Reg8Bits<19>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<19>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<19>> for crate::reg32::Reg32Bits<19> {
+    fn from(item: crate::reg16::Reg16Bits<19>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<19>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<19>> for crate::reg32::Reg32Bits<19> {
+    fn from(item: crate::reg64::Reg64Bits<19>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<19>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<20>> for crate::reg32::Reg32Bits<20> {
+    fn from(item: crate::reg8::Reg8Bits<20>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<20>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<20>> for crate::reg32::Reg32Bits<20> {
+    fn from(item: crate::reg16::Reg16Bits<20>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<20>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<20>> for crate::reg32::Reg32Bits<20> {
+    fn from(item: crate::reg64::Reg64Bits<20>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<20>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<21>> for crate::reg32::Reg32Bits<21> {
+    fn from(item: crate::reg8::Reg8Bits<21>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<21>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<21>> for crate::reg32::Reg32Bits<21> {
+    fn from(item: crate::reg16::Reg16Bits<21>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<21>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<21>> for crate::reg32::Reg32Bits<21> {
+    fn from(item: crate::reg64::Reg64Bits<21>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<21>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<22>> for crate::reg32::Reg32Bits<22> {
+    fn from(item: crate::reg8::Reg8Bits<22>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<22>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<22>> for crate::reg32::Reg32Bits<22> {
+    fn from(item: crate::reg16::Reg16Bits<22>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<22>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<22>> for crate::reg32::Reg32Bits<22> {
+    fn from(item: crate::reg64::Reg64Bits<22>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<22>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<23>> for crate::reg32::Reg32Bits<23> {
+    fn from(item: crate::reg8::Reg8Bits<23>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<23>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<23>> for crate::reg32::Reg32Bits<23> {
+    fn from(item: crate::reg16::Reg16Bits<23>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<23>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<23>> for crate::reg32::Reg32Bits<23> {
+    fn from(item: crate::reg64::Reg64Bits<23>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<23>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<24>> for crate::reg32::Reg32Bits<24> {
+    fn from(item: crate::reg8::Reg8Bits<24>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<24>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<24>> for crate::reg32::Reg32Bits<24> {
+    fn from(item: crate::reg16::Reg16Bits<24>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<24>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<24>> for crate::reg32::Reg32Bits<24> {
+    fn from(item: crate::reg64::Reg64Bits<24>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<24>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<25>> for crate::reg32::Reg32Bits<25> {
+    fn from(item: crate::reg8::Reg8Bits<25>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<25>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<25>> for crate::reg32::Reg32Bits<25> {
+    fn from(item: crate::reg16::Reg16Bits<25>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<25>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<25>> for crate::reg32::Reg32Bits<25> {
+    fn from(item: crate::reg64::Reg64Bits<25>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<25>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<26>> for crate::reg32::Reg32Bits<26> {
+    fn from(item: crate::reg8::Reg8Bits<26>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<26>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<26>> for crate::reg32::Reg32Bits<26> {
+    fn from(item: crate::reg16::Reg16Bits<26>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<26>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<26>> for crate::reg32::Reg32Bits<26> {
+    fn from(item: crate::reg64::Reg64Bits<26>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<26>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<27>> for crate::reg32::Reg32Bits<27> {
+    fn from(item: crate::reg8::Reg8Bits<27>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<27>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<27>> for crate::reg32::Reg32Bits<27> {
+    fn from(item: crate::reg16::Reg16Bits<27>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<27>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<27>> for crate::reg32::Reg32Bits<27> {
+    fn from(item: crate::reg64::Reg64Bits<27>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<27>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<28>> for crate::reg32::Reg32Bits<28> {
+    fn from(item: crate::reg8::Reg8Bits<28>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<28>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<28>> for crate::reg32::Reg32Bits<28> {
+    fn from(item: crate::reg16::Reg16Bits<28>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<28>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<28>> for crate::reg32::Reg32Bits<28> {
+    fn from(item: crate::reg64::Reg64Bits<28>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<28>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<29>> for crate::reg32::Reg32Bits<29> {
+    fn from(item: crate::reg8::Reg8Bits<29>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<29>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<29>> for crate::reg32::Reg32Bits<29> {
+    fn from(item: crate::reg16::Reg16Bits<29>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<29>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<29>> for crate::reg32::Reg32Bits<29> {
+    fn from(item: crate::reg64::Reg64Bits<29>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<29>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<30>> for crate::reg32::Reg32Bits<30> {
+    fn from(item: crate::reg8::Reg8Bits<30>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<30>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<30>> for crate::reg32::Reg32Bits<30> {
+    fn from(item: crate::reg16::Reg16Bits<30>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<30>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<30>> for crate::reg32::Reg32Bits<30> {
+    fn from(item: crate::reg64::Reg64Bits<30>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<30>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<31>> for crate::reg32::Reg32Bits<31> {
+    fn from(item: crate::reg8::Reg8Bits<31>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<31>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<31>> for crate::reg32::Reg32Bits<31> {
+    fn from(item: crate::reg16::Reg16Bits<31>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<31>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<31>> for crate::reg32::Reg32Bits<31> {
+    fn from(item: crate::reg64::Reg64Bits<31>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<31>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "8bit")]
+impl From<crate::reg8::Reg8Bits<32>> for crate::reg32::Reg32Bits<32> {
+    fn from(item: crate::reg8::Reg8Bits<32>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<32>>::
+            take_low(crate::reg32::Reg32Bits::new(u8::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "16bit")]
+impl From<crate::reg16::Reg16Bits<32>> for crate::reg32::Reg32Bits<32> {
+    fn from(item: crate::reg16::Reg16Bits<32>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<32>>::
+            take_low(crate::reg32::Reg32Bits::new(u16::from(item) as u32))
+    }
+}
+#[doc(hidden)]
+#[cfg(feature = "64bit")]
+impl From<crate::reg64::Reg64Bits<32>> for crate::reg32::Reg32Bits<32> {
+    fn from(item: crate::reg64::Reg64Bits<32>) -> Self {
+        <crate::reg32::Reg32Bits<32> as crate::reg32::Reg32BitsDownCast<32>>::
+            take_low(crate::reg32::Reg32Bits::new(u64::from(item) as u32))
     }
 }

@@ -51,10 +51,10 @@
 //! 
 //! // Most of the operations you can do from within the struct however
 //! assert_eq!(low_12bits, 0x678);
-//! assert_eq!(low_12bits + 1, 0x679);
-//! assert_eq!(low_12bits - 1, 0x677);
-//! assert_eq!(low_12bits % 2, 0);
-//! assert_eq!(low_12bits >> 2, 0x6);
+//! assert_eq!(low_12bits + 1u32, 0x679);
+//! assert_eq!(low_12bits - 1u32, 0x677);
+//! assert_eq!(low_12bits % 2u32, 0);
+//! assert_eq!(low_12bits >> 8u32, 0x6);
 //!
 //! // You can also add bits
 //! let bigger: Reg32Bits<16> = low_12bits.zero_extend(); // 0x0678
@@ -91,18 +91,17 @@
 //! The `reg8.rs`, `reg16.rs`, `reg32.rs` and `reg64.rs` are automatically generated from the
 //! `reg_reference.rs` file. This is done with the `generate_impl_rs.py` script.
 
-#![cfg(feature = "no-std")]
-#![no_std]
+#![cfg_attr(feature = "no-std", no_std)]
 
 pub mod prelude;
 
-#[cfg(any(doc, feature = "8bit"))]
+#[cfg(feature = "8bit")]
 pub mod reg8;
-#[cfg(any(doc, feature = "16bit"))]
+#[cfg(feature = "16bit")]
 pub mod reg16;
-#[cfg(any(doc, feature = "32bit"))]
+#[cfg(feature = "32bit")]
 pub mod reg32;
-#[cfg(any(doc, feature = "64bit"))]
+#[cfg(feature = "64bit")]
 pub mod reg64;
 
 #[cfg(test)]

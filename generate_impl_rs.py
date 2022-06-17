@@ -3,6 +3,7 @@
 STRUCT_BASE_NAME = "PlaceholderStructName"
 STRUCT_ACTUAL_NAME = "Reg{size}Bits"
 FIND_SIZE = 32
+MAX_SIZE = 64
 DEBUG = 0
 
 REFERENCE_FILE = 'src/reg_reference.rs'
@@ -26,6 +27,16 @@ impl PartialEq<BaseType> for PlaceholderStructName<i> {
         self.0 == *other
     }
 }
+"""
+
+INTER_SIZE_CONVERT = """
+#[cfg(feature = "{1}bit")]
+impl From<crate::reg{1}::Reg{1}Bits<{2}>> for crate::reg{0}::Reg{0}Bits<{2}> {{
+    fn from(item: crate::reg{1}::Reg{1}Bits<{2}>) -> Self {{
+        <crate::reg{0}::Reg{0}Bits<{0}> as crate::reg{0}::Reg{0}BitsDownCast<{2}>>::
+            take_low(crate::reg{0}::Reg{0}Bits::new(u{1}::from(item) as u{0}))
+    }}
+}}
 """
 
 def i_geq_j(_, i, j):
@@ -74,6 +85,10 @@ with open(REFERENCE_FILE, 'r') as ref_file:
         filled_txt = COMMENTS
         filled_txt += "\n"
         print("Generating {} bits struct... ".format(size), end = '')        
+
+        SKIP_START = "[SKIP-{}]".format(size)
+        SKIP_END = "[END SKIP-{}]".format(size)
+
 
         # Fill in the arguments
         for line_num, line in enumerate(ref_lines):
@@ -143,6 +158,19 @@ with open(REFERENCE_FILE, 'r') as ref_file:
             filled_txt += "\n"
             filled_txt += BASE_TYPE_EQ.strip().replace(STRUCT_BASE_NAME, replace_struct_name).replace('<i>', '<{}>'.format(i))
             filled_txt += "\n"
+        
+        for i in range(1, MAX_SIZE+1):
+            if i > size:
+                break;
+
+            for other_size in sizes:
+                if size == other_size:
+                    continue
+
+                filled_txt += DOC_HIDDEN
+                filled_txt += "\n"
+                filled_txt += INTER_SIZE_CONVERT.strip().format(size, other_size, i)
+                filled_txt += "\n"
             
         target_filename = 'src/reg{size}.rs'.format(size=size)
         with open(target_filename, 'w') as target_file:
