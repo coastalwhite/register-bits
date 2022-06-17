@@ -17,13 +17,69 @@
 //! To utilize most of the functionality a set of traits need to used. To utilize all the useful
 //! traites it is recommended to use the prelude.
 //!
+//! ## Basic Usage
+//!
 //! ```
 //! use register_bits::prelude::*;
 //!
-//! let value = Reg32Bits::new(0x4321_1234);
-//! let first_12bits: Reg32Bits<12> = value.take_low();
+//! // Forms a Reg32Bits<32>
+//! let value = Reg32Bits::new(0x1234_5678);
 //!
-//! assert_eq!(first_12bits, 0x234);
+//! // Take substrings from value
+//! let low_12bits: Reg32Bits<12> = value.take_low(); // 0x678
+//! let high_12bits: Reg32Bits<12> = value.take_high(); // 0x123
+//!
+//! // Type of Reg32Bits<24> is automatically inferred
+//! let concatination = high_12bits.concat(low_12bits); // 0x123_678
+//!
+//! assert_eq!(high_12bits.concat(low_12bits), 0x123_678); 
+//! ```
+//!
+//! ## Casting
+//!
+//! ```
+//! use register_bits::prelude::*;
+//!
+//! // Forms a Reg32Bits<32>
+//! let value = Reg32Bits::new(0x1234_5678);
+//!
+//! let low_12bits: Reg32Bits<12> = value.take_low(); // 0x678
+//!
+//! // We can fetch the inner value
+//! let uint_value = u32::from(low_12bits);
+//! assert_eq!(uint_value, 0x678);
+//! 
+//! // Most of the operations you can do from within the struct however
+//! assert_eq!(low_12bits, 0x678);
+//! assert_eq!(low_12bits + 1, 0x679);
+//! assert_eq!(low_12bits - 1, 0x677);
+//! assert_eq!(low_12bits % 2, 0);
+//! assert_eq!(low_12bits >> 2, 0x6);
+//!
+//! // You can also add bits
+//! let bigger: Reg32Bits<16> = low_12bits.zero_extend(); // 0x0678
+//! let sign_extended: Reg32Bits<16> = low_12bits.sign_extend(); // 0x0678
+//! let padded: Reg32Bits<16> = low_12bits.zero_pad(); // 0x6780
+//! ```
+//!
+//! ## Individual bit manipulations
+//!
+//! ```
+//! use register_bits::prelude::*;
+//!
+//! // Forms a Reg32Bits<32>
+//! let value = Reg32Bits::new(0b1011_1000);
+//!
+//! let low_byte: Reg32Bits<8> = value.take_low(); // 0b1011_1000
+//!
+//! // We can get the value of individual bits
+//! let bits = low_byte.bits();
+//!
+//! // This is perfect for pattern matching
+//! assert_eq!(bits, [1, 0, 1, 1, 1, 0, 0, 0]);
+//! 
+//! // We can also get a bit from a runtime variable
+//! assert_eq!(low_byte.get(3).unwrap(), 1u8);
 //! ```
 //!
 //! # No-Std
@@ -40,13 +96,13 @@
 
 pub mod prelude;
 
-#[cfg(feature = "8bit")]
+#[cfg(any(doc, feature = "8bit"))]
 pub mod reg8;
-#[cfg(feature = "16bit")]
+#[cfg(any(doc, feature = "16bit"))]
 pub mod reg16;
-#[cfg(feature = "32bit")]
+#[cfg(any(doc, feature = "32bit"))]
 pub mod reg32;
-#[cfg(feature = "64bit")]
+#[cfg(any(doc, feature = "64bit"))]
 pub mod reg64;
 
 #[cfg(test)]
