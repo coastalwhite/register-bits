@@ -2,7 +2,7 @@
 name = "register-bits"
 authors = ["Gijs Burghoorn <me@gburghoorn.com"]
 description = "Perform register-bit manipulation which is verified at compile time"
-version = "0.1.0"
+version = "0.2.0"
 
 edition = "2021"
 
