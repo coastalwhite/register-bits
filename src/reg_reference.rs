@@ -5,7 +5,7 @@ use core::num::Wrapping;
 type BaseType = u32; // [REF_REPLACE]
 const NUM_BITS: usize = BaseType::BITS as usize;
 
-#[derive(Default, Debug, PartialEq, PartialOrd, Clone, Copy)]
+#[derive(Debug, PartialEq, PartialOrd, Clone, Copy)]
 #[repr(transparent)]
 pub struct PlaceholderStructName<const N: usize>(BaseType);
 

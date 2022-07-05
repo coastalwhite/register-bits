@@ -37,6 +37,28 @@ impl From<crate::reg{1}::Reg{1}Bits<{2}>> for crate::reg{0}::Reg{0}Bits<{2}> {{
             take_low(crate::reg{0}::Reg{0}Bits::new(u{1}::from(item) as u{0}))
     }}
 }}
+#[doc(hidden)]
+impl From<crate::reg{0}::Reg{0}Bits<{2}>> for u{1} {{
+    fn from(item: crate::reg{0}::Reg{0}Bits<{2}>) -> Self {{
+        item.0 as u{1}
+    }}
+}}
+"""
+
+SMALLER_CREATE_IMPL = """
+impl From<u{1}> for crate::reg{0}::Reg{0}Bits<{1}> {{
+    fn from(item: u{1}) -> Self {{
+        Self(item.into())
+    }}
+}}
+"""
+
+DEFAULT_IMPL = """
+impl Default for crate::reg{0}::Reg{0}Bits<{1}> {{
+    fn default() -> Self {{
+        Self(0)
+    }}
+}}
 """
 
 def i_geq_j(_, i, j):
@@ -171,6 +193,21 @@ with open(REFERENCE_FILE, 'r') as ref_file:
                 filled_txt += "\n"
                 filled_txt += INTER_SIZE_CONVERT.strip().format(size, other_size, i)
                 filled_txt += "\n"
+
+        for other_size in sizes:
+            if size <= other_size:
+                continue
+
+            filled_txt += DOC_HIDDEN
+            filled_txt += "\n"
+            filled_txt += SMALLER_CREATE_IMPL.strip().format(size, other_size)
+            filled_txt += "\n"
+
+        for i in range(1, size+1):
+            filled_txt += DOC_HIDDEN
+            filled_txt += "\n"
+            filled_txt += DEFAULT_IMPL.strip().format(size, i)
+            filled_txt += "\n"
             
         target_filename = 'src/reg{size}.rs'.format(size=size)
         with open(target_filename, 'w') as target_file:
