@@ -9,6 +9,13 @@ const NUM_BITS: usize = BaseType::BITS as usize;
 #[repr(transparent)]
 pub struct PlaceholderStructName<const N: usize>(BaseType);
 
+impl<const N: usize> AsRef<BaseType> for PlaceholderStructName<N> {
+    fn as_ref(&self) -> &BaseType {
+        let Self(inner) = self;
+        inner
+    }
+}
+
 impl<const N: usize> core::ops::Deref for PlaceholderStructName<N> {
     type Target = BaseType;
 
