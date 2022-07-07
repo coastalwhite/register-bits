@@ -16,6 +16,13 @@ const NUM_BITS: usize = BaseType::BITS as usize;
 #[repr(transparent)]
 pub struct Reg8Bits<const N: usize>(BaseType);
 
+impl<const N: usize> AsRef<BaseType> for Reg8Bits<N> {
+    fn as_ref(&self) -> &BaseType {
+        let Self(inner) = self;
+        inner
+    }
+}
+
 impl<const N: usize> core::ops::Deref for Reg8Bits<N> {
     type Target = BaseType;
 
