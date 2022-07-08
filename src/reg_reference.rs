@@ -1,6 +1,5 @@
 use core::num::Wrapping;
 
-
 // The next two lines will be replaced with the appropriate base type and size
 type BaseType = u32; // [REF_REPLACE]
 const NUM_BITS: usize = BaseType::BITS as usize;
@@ -124,7 +123,7 @@ impl<const N: usize> PlaceholderStructName<N> {
     }
 
     /// Fetch a bit at runtime
-    /// 
+    ///
     /// This will fail if index >= N, where N is the size of the [PlaceholderStructName].
     ///
     /// ```
@@ -311,7 +310,9 @@ impl<const N: usize> PlaceholderStructNameBitSize for PlaceholderStructName<N> {
 }
 
 // F > T
-pub trait PlaceholderStructNameDownCast<const T: usize>: PlaceholderStructNameBitSize + Copy + Into<BaseType> {
+pub trait PlaceholderStructNameDownCast<const T: usize>:
+    PlaceholderStructNameBitSize + Copy + Into<BaseType>
+{
     /// Take a number of the least significant bits
     ///
     /// # Example
@@ -348,7 +349,9 @@ pub trait PlaceholderStructNameDownCast<const T: usize>: PlaceholderStructNameBi
     }
 }
 
-pub trait PlaceholderStructNameUpCast<const T: usize>: PlaceholderStructNameBitSize + Copy + Into<BaseType> {
+pub trait PlaceholderStructNameUpCast<const T: usize>:
+    PlaceholderStructNameBitSize + Copy + Into<BaseType>
+{
     /// Extend the current register bits with 0s on the most significant bits
     ///
     /// # Example

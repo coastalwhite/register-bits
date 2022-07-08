@@ -7,7 +7,6 @@
 // 3. Implementation of traits
 use core::num::Wrapping;
 
-
 // The next two lines will be replaced with the appropriate base type and size
 type BaseType = u8; // [REF_REPLACE]
 const NUM_BITS: usize = BaseType::BITS as usize;
@@ -131,7 +130,7 @@ impl<const N: usize> Reg8Bits<N> {
     }
 
     /// Fetch a bit at runtime
-    /// 
+    ///
     /// This will fail if index >= N, where N is the size of the [Reg8Bits].
     ///
     /// ```
@@ -318,7 +317,9 @@ impl<const N: usize> Reg8BitsBitSize for Reg8Bits<N> {
 }
 
 // F > T
-pub trait Reg8BitsDownCast<const T: usize>: Reg8BitsBitSize + Copy + Into<BaseType> {
+pub trait Reg8BitsDownCast<const T: usize>:
+    Reg8BitsBitSize + Copy + Into<BaseType>
+{
     /// Take a number of the least significant bits
     ///
     /// # Example
@@ -355,7 +356,9 @@ pub trait Reg8BitsDownCast<const T: usize>: Reg8BitsBitSize + Copy + Into<BaseTy
     }
 }
 
-pub trait Reg8BitsUpCast<const T: usize>: Reg8BitsBitSize + Copy + Into<BaseType> {
+pub trait Reg8BitsUpCast<const T: usize>:
+    Reg8BitsBitSize + Copy + Into<BaseType>
+{
     /// Extend the current register bits with 0s on the most significant bits
     ///
     /// # Example
@@ -954,6 +957,99 @@ impl From<crate::reg64::Reg64Bits<8>> for crate::reg8::Reg8Bits<8> {
 impl From<crate::reg8::Reg8Bits<8>> for u64 {
     fn from(item: crate::reg8::Reg8Bits<8>) -> Self {
         item.0 as u64
+    }
+}
+
+#[cfg(feature = "16bit")]
+impl<const N: usize, const T: usize> Reg8BitsDownCast<T> for crate::reg16::Reg16Bits<N>
+where
+    Reg16Bits<N>: Into<Reg8Bits<N>>,
+    Reg8Bits<N>: Reg8BitsDownCast<T>,
+{
+    fn take_low(self) -> Reg8Bits<T> {
+        self.into().take_low()
+    }
+    fn take_high(self) -> Reg8Bits<T> {
+        self.into().take_high()
+    }
+}
+
+#[cfg(feature = "16bit")]
+impl<const N: usize, const T: usize> Reg8BitsUpCast<T> for crate::reg16::Reg16Bits<N>
+where
+    Reg16Bits<N>: Into<Reg8Bits<N>>,
+    Reg8Bits<N>: Reg8BitsUpCast<T>,
+{
+    fn zero_pad(self) -> Reg8Bits<T> {
+        self.into().zero_pad()
+    }
+    fn zero_extend(self) -> Reg8Bits<T> {
+        self.into().zero_extend()
+    }
+    fn sign_extend(self) -> Reg8Bits<T> {
+        self.into().sign_extend()
+    }
+}
+
+#[cfg(feature = "32bit")]
+impl<const N: usize, const T: usize> Reg8BitsDownCast<T> for crate::reg32::Reg32Bits<N>
+where
+    Reg32Bits<N>: Into<Reg8Bits<N>>,
+    Reg8Bits<N>: Reg8BitsDownCast<T>,
+{
+    fn take_low(self) -> Reg8Bits<T> {
+        self.into().take_low()
+    }
+    fn take_high(self) -> Reg8Bits<T> {
+        self.into().take_high()
+    }
+}
+
+#[cfg(feature = "32bit")]
+impl<const N: usize, const T: usize> Reg8BitsUpCast<T> for crate::reg32::Reg32Bits<N>
+where
+    Reg32Bits<N>: Into<Reg8Bits<N>>,
+    Reg8Bits<N>: Reg8BitsUpCast<T>,
+{
+    fn zero_pad(self) -> Reg8Bits<T> {
+        self.into().zero_pad()
+    }
+    fn zero_extend(self) -> Reg8Bits<T> {
+        self.into().zero_extend()
+    }
+    fn sign_extend(self) -> Reg8Bits<T> {
+        self.into().sign_extend()
+    }
+}
+
+#[cfg(feature = "64bit")]
+impl<const N: usize, const T: usize> Reg8BitsDownCast<T> for crate::reg64::Reg64Bits<N>
+where
+    Reg64Bits<N>: Into<Reg8Bits<N>>,
+    Reg8Bits<N>: Reg8BitsDownCast<T>,
+{
+    fn take_low(self) -> Reg8Bits<T> {
+        self.into().take_low()
+    }
+    fn take_high(self) -> Reg8Bits<T> {
+        self.into().take_high()
+    }
+}
+
+#[cfg(feature = "64bit")]
+impl<const N: usize, const T: usize> Reg8BitsUpCast<T> for crate::reg64::Reg64Bits<N>
+where
+    Reg64Bits<N>: Into<Reg8Bits<N>>,
+    Reg8Bits<N>: Reg8BitsUpCast<T>,
+{
+    fn zero_pad(self) -> Reg8Bits<T> {
+        self.into().zero_pad()
+    }
+    fn zero_extend(self) -> Reg8Bits<T> {
+        self.into().zero_extend()
+    }
+    fn sign_extend(self) -> Reg8Bits<T> {
+        self.into().sign_extend()
     }
 }
 #[doc(hidden)]
