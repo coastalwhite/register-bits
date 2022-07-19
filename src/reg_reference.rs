@@ -104,7 +104,7 @@ impl<const N: usize> PlaceholderStructName<N> {
     ///     _ => unreachable!(),
     /// }
     /// ```
-    pub const fn bits(&self) -> [u8; N] {
+    pub const fn bits(self) -> [u8; N] {
         let mut bits = [0; N];
         let Self(mut value) = self;
 
@@ -138,7 +138,7 @@ impl<const N: usize> PlaceholderStructName<N> {
     /// assert_eq!(bits.get(3).unwrap(), 1u8);
     /// assert_eq!(bits.get(4), None);
     /// ```
-    pub fn get(&self, index: usize) -> Option<PlaceholderStructName<1>> {
+    pub fn get(self, index: usize) -> Option<PlaceholderStructName<1>> {
         if index >= N {
             return None;
         }
@@ -150,6 +150,16 @@ impl<const N: usize> PlaceholderStructName<N> {
         };
 
         Some(PlaceholderStructName(last_bit))
+    }
+
+    /// Give the number of ones in the bits
+    pub fn one_count(self) -> usize {
+        self.bits().into_iter().filter(|bit| { *bit == 1 }).count()
+    }
+    
+    /// Give the number of ones in the bits
+    pub fn zero_count(self) -> usize {
+        self.bits().into_iter().filter(|bit| { *bit == 0 }).count()
     }
 }
 

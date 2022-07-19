@@ -61,39 +61,6 @@ impl Default for crate::reg{0}::Reg{0}Bits<{1}> {{
 }}
 """
 
-INTERREG_DOWNCAST_AND_UPCAST = """
-#[cfg(feature = "{1}bit")]
-impl<const N: usize, const T: usize> Reg{0}BitsDownCast<T> for crate::reg{1}::Reg{1}Bits<N>
-where
-    Reg{1}Bits<N>: Into<Reg{0}Bits<N>>,
-    Reg{0}Bits<N>: Reg{0}BitsDownCast<T>,
-{{
-    fn take_low(self) -> Reg{0}Bits<T> {{
-        self.into().take_low()
-    }}
-    fn take_high(self) -> Reg{0}Bits<T> {{
-        self.into().take_high()
-    }}
-}}
-
-#[cfg(feature = "{1}bit")]
-impl<const N: usize, const T: usize> Reg{0}BitsUpCast<T> for crate::reg{1}::Reg{1}Bits<N>
-where
-    Reg{1}Bits<N>: Into<Reg{0}Bits<N>>,
-    Reg{0}Bits<N>: Reg{0}BitsUpCast<T>,
-{{
-    fn zero_pad(self) -> Reg{0}Bits<T> {{
-        self.into().zero_pad()
-    }}
-    fn zero_extend(self) -> Reg{0}Bits<T> {{
-        self.into().zero_extend()
-    }}
-    fn sign_extend(self) -> Reg{0}Bits<T> {{
-        self.into().sign_extend()
-    }}
-}}
-"""
-
 def i_geq_j(_, i, j):
     return i >= j
 
@@ -234,14 +201,6 @@ with open(REFERENCE_FILE, 'r') as ref_file:
             filled_txt += DOC_HIDDEN
             filled_txt += "\n"
             filled_txt += SMALLER_CREATE_IMPL.strip().format(size, other_size)
-            filled_txt += "\n"
-
-        for other_size in sizes:
-            if size == other_size:
-                continue
-
-            filled_txt += "\n"
-            filled_txt += INTERREG_DOWNCAST_AND_UPCAST.strip().format(size, other_size)
             filled_txt += "\n"
 
         for i in range(1, size+1):
